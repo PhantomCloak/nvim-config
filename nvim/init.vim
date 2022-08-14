@@ -257,14 +257,17 @@ EOF
 
 let g:last_char = 'd'
 function s:test() abort
-    let curChar = matchstr(getline('.'), '\%' . col('.') . 'c.')
+    let curChar = strcharpart(strpart(getline('.'), col('.') - 2), 0, 1)
 
     if(g:last_char == curChar)
+	return
     endif
 
+    let save_pos = getpos(".")
     if (curChar == '(')
 	execute "normal \<Plug>(omnisharp_signature_help)"
     endif
+    call setpos('.', save_pos)
 
     let g:last_char = curChar
 endfunction
