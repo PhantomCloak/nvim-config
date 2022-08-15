@@ -37,7 +37,6 @@ Plug 'tpope/vim-surround'
 Plug 's1n7ax/nvim-terminal'
 Plug 'puremourning/vimspector'
 
-Plug 'ervandew/supertab'
 " idk but it makes vim better they say
 Plug 'tpope/vim-sensible'
 Plug 'itchyny/vim-gitbranch'
@@ -48,7 +47,10 @@ Plug 'tpope/vim-rhubarb'
 Plug 'junegunn/gv.vim'
 
 " LSP magic
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+
 Plug 'MaskRay/ccls'
 Plug 'antoinemadec/FixCursorHold.nvim'
 
@@ -109,71 +111,10 @@ colorscheme ayu
 let g:ale_linters = { 'cs': ['OmniSharp'] }
 
 " omnisharp bindings
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-nmap <leader>cl  <Plug>(coc-codelens-action)
-
-augroup ccls_commands
-autocmd!
-
-autocmd FileType cpp,h nmap <silent> [g <Plug>(coc-diagnostic-prev)
-autocmd FileType cpp,h nmap <silent> ]g <Plug>(coc-diagnostic-next) 
-
-autocmd FileType cpp,h nmap <silent> gd <Plug>(coc-definition)
-autocmd FileType cpp,h nmap <silent> gy <Plug>(coc-type-definition)
-autocmd FileType cpp,h nmap <silent> gi <Plug>(coc-implementation)
-autocmd FileType cpp,h nmap <silent> gr <Plug>(coc-references)
-
-autocmd FileType cpp,h nmap <leader>rn <Plug>(coc-rename)
-autocmd FileType cpp,h xmap <leader>f Plug>(coc-format-selected)
-
-autocmd FileType cpp,h nmap <leader>= <Plug>(coc-format-selected)
-
-augroup END
 
 " in millisecond, used for both CursorHold and CursorHoldI,
 " use updatetime instead if not defined
 let g:cursorhold_updatetime = 100
-augroup omnisharp_commands
-  autocmd!
-
-  autocmd CursorHoldI *.cs call s:test() 
-  autocmd CursorHold *.cs call s:test() 
-  "autocmd CursorHold *.cs OmniSharpTypeLookup 
-  "autocmd CursorHoldI *.cs execute "normal \<Plug>(omnisharp_signature_help)"
-
-  " The following commands are contextual, based on the cursor position.
-  autocmd FileType cs nmap <silent> <buffer> gd <Plug>(omnisharp_go_to_definition)
-  autocmd FileType cs nmap <silent> <buffer> gr <Plug>(omnisharp_find_usages)
-  autocmd FileType cs nmap <silent> <buffer> gd <Plug>(omnisharp_find_implementations)
-  autocmd FileType cs nmap <silent> <buffer> <Leader>ospd <Plug>(omnisharp_preview_definition)
-  autocmd FileType cs nmap <silent> <buffer> <Leader>ospi <Plug>(omnisharp_preview_implementations)
-  autocmd FileType cs nmap <silent> <buffer> <Leader>ost <Plug>(omnisharp_type_lookup)
-  autocmd FileType cs nmap <silent> <buffer> <Leader>osd <Plug>(omnisharp_documentation)
-  autocmd FileType cs nmap <silent> <buffer> <Leader>osfs <Plug>(omnisharp_find_symbol)
-  autocmd FileType cs nmap <silent> <buffer> <Leader>osfx <Plug>(omnisharp_fix_usings)
-  autocmd FileType cs nmap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
-  autocmd FileType cs imap <silent> <buffer> <C-\> <Plug>(omnisharp_signature_help)
-
-  " Navigate up and down by method/property/field
-  autocmd FileType cs nmap <silent> <buffer> [[ <Plug>(omnisharp_navigate_up)
-  autocmd FileType cs nmap <silent> <buffer> ]] <Plug>(omnisharp_navigate_down)
-  " Find all code errors/warnings for the current solution and populate the quickfix window autocmd FileType cs nmap <silent> <buffer> <Leader>osgcc <Plug>(omnisharp_global_code_check)
-  " Contextual code actions (uses fzf, vim-clap, CtrlP or unite.vim selector when available)
-  autocmd FileType cs nmap <silent> <buffer> <Leader>osca <Plug>(omnisharp_code_actions)
-  autocmd FileType cs xmap <silent> <buffer> <Leader>osca <Plug>(omnisharp_code_actions)
-  " Repeat the last code action performed (does not use a selector)
-  autocmd FileType cs nmap <silent> <buffer> <Leader>os. <Plug>(omnisharp_code_action_repeat)
-  autocmd FileType cs xmap <silent> <buffer> <Leader>os. <Plug>(omnisharp_code_action_repeat)
-
-  autocmd FileType cs nmap <silent> <buffer> <Leader>os= <Plug>(omnisharp_code_format)
-
-  autocmd FileType cs nmap <silent> <buffer> <F2> <Plug>(omnisharp_rename)
-
-  autocmd FileType cs nmap <silent> <buffer> <Leader>osre <Plug>(omnisharp_restart_server)
-  autocmd FileType cs nmap <silent> <buffer> <Leader>osst <Plug>(omnisharp_start_server)
-  autocmd FileType cs nmap <silent> <buffer> <Leader>ossp <Plug>(omnisharp_stop_server)
-augroup END
 
 " make highlighting better for omnisharp
 let g:OmniSharp_highlight_groups = {
@@ -208,7 +149,30 @@ let g:lightline = {
       \ }
 
  lua << EOF
--- don't index unncessary files 
+
+local cmp = require 'cmp'
+cmp.setup {
+  mapping = {
+    ['<Tab>'] = cmp.mapping.select_next_item(),
+    ['<S-Tab>'] = cmp.mapping.select_prev_item(),
+    ['<CR>'] = cmp.mapping.confirm({
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    })
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+  }
+}
+
+require'lspconfig'.omnisharp.setup {
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  on_attach = function(_, bufnr)
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  end,
+  cmd = { "/Users/unalozyurt/Downloads/omnisharp-osx-x64-net6.0/OmniSharp", "--languageserver" , "--hostPID", tostring(pid) },
+}
+
 require'telescope'.setup({
     defaults = {
         file_ignore_patterns = { "^./.git/", "^node_modules/", "^vendor/", "%.meta",
@@ -219,39 +183,29 @@ require'telescope'.setup({
     }
 })
 
-
 require('telescope').load_extension('env')
 
 require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all"
   ensure_installed = { "c", "lua", "rust" },
-
-  -- Install parsers synchronously (only applied to `ensure_installed`)
   sync_install = false,
-
-  -- Automatically install missing parsers when entering buffer
   auto_install = true,
-
-  -- List of parsers to ignore installing (for "all")
   ignore_install = { "javascript" },
-
   highlight = {
-    -- `false` will disable the whole extension
     enable = false,
-
-    -- NOTE: these are the names of the parsers and not the filetype. (for example if you want to
-    -- disable highlighting for the `tex` filetype, you need to include `latex` in this list as this is
-    -- the name of the parser)
-    -- list of language that will be disabled
     disable = {"csharp", "cs", "rust", "vim"},
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
     additional_vim_regex_highlighting = false,
   },
 }
+
+nnoremap('<leader>fu', 'Telescope lsp_references')
+nnoremap('<leader>gd', 'Telescope lsp_definitions')
+nnoremap('<leader>rn', 'lua vim.lsp.buf.rename()')
+nnoremap('<leader>dn', 'lua vim.lsp.diagnostic.goto_next()')
+nnoremap('<leader>dN', 'lua vim.lsp.diagnostic.goto_prev()')
+nnoremap('<leader>dd', 'Telescope lsp_document_diagnostics')
+nnoremap('<leader>dD', 'Telescope lsp_workspace_diagnostics')
+nnoremap('<leader>xx', 'Telescope lsp_code_actions')
+nnoremap('<leader>xd', '%Telescope lsp_range_code_actions')
 EOF
 
 
@@ -328,8 +282,3 @@ nmap <leader>gK 9999<leader>gk
 nmap <Leader>gb : Git blame<CR>
 nmap <Leader>gd : GBrowse<CR>
 nmap <Leader>gr : GV?<CR>
-
-" If you like colors instead
-" highlight SignifySignAdd                  ctermbg=green                guibg=#00ff00
-" highlight SignifySignDelete ctermfg=black ctermbg=red    guifg=#ffffff guibg=#ff0000
-" highlight SignifySignChange ctermfg=black ctermbg=yellow guifg=#000000 guibg=#ffff00
