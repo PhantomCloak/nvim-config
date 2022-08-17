@@ -18,7 +18,7 @@ Plug 'olimorris/onedarkpro.nvim'
 Plug 'junegunn/seoul256.vim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'nvim-lualine/lualine.nvim'
-"Plug 'ryanoasis/vim-devicons' " Poor performance
+Plug 'kyazdani42/nvim-tree.lua'
 
 " Code Analaysis & Formatting & Debugging
 Plug 'liuchengxu/vim-clap'
@@ -30,7 +30,6 @@ Plug 'ptzz/lf.vim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'LinArcX/telescope-env.nvim'
 Plug 's1n7ax/nvim-terminal'
-Plug 'preservim/nerdtree'
 Plug 'voldikss/vim-floaterm'
 Plug 'airblade/vim-rooter'
 
@@ -102,7 +101,7 @@ lua << EOF
   hint_enable = false, 
   hi_parameter = "LspSignatureActiveParameter", 
   handler_opts = {
-    border = "none" 
+    border = "rounded" 
   },
   always_trigger = false,
   auto_close_after = nil, 
@@ -119,8 +118,43 @@ lua << EOF
 }
 
 local telescope = require('telescope')
+local nvimtree = require('nvim-tree')
+
+local ayu = require('ayu')
+local lualine = require('lualine')
+
+local cmp = require('cmp')
+local cmpnvimlsp = require('cmp_nvim_lsp')
+local lspconfig = require('lspconfig')
+local lspsignature = require('lsp_signature')
+local lspformat = require('lsp-format')
+
 local keymap = vim.api.nvim_set_keymap
 local opts = { noremap = true, silent = true } 
+local api = vim.api
+
+nvimtree.setup({
+  sort_by = "case_sensitive",
+  view = {
+    adaptive_size = true,
+    mappings = {
+      list = {
+        { key = "u", action = "dir_up" },
+      },
+    },
+  },
+  renderer = {
+    group_empty = true,
+    highlight_opened_files = "icon",
+  },
+  update_focused_file = {
+        enable = true,
+        ignore_list = {},
+  },
+  filters = {
+    dotfiles = true,
+  },
+})
 
 -- Telescope
 telescope.setup({
@@ -136,8 +170,6 @@ telescope.setup({
 telescope.load_extension('env')
 
 -- LSP Itself
-local cmp = require 'cmp'
-
 cmp.setup {
     mapping = {
 	['<Tab>'] = cmp.mapping.select_next_item(),
@@ -152,8 +184,8 @@ sources = {
     }
 }
 
-require'lspconfig'.omnisharp.setup {
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+lspconfig.omnisharp.setup {
+  capabilities = cmpnvimlsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
   on_attach = function(_, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
   end,
@@ -161,12 +193,11 @@ require'lspconfig'.omnisharp.setup {
 }
 
 -- LSP Signature Help
-require'lsp_signature'.setup(cfg)
+lspsignature.setup(cfg)
 
 -- LSP Formatter
-require("lsp-format").setup {}
-
-require "lspconfig".gopls.setup { on_attach = require "lsp-format".on_attach }
+lspformat.setup {}
+lspconfig.gopls.setup { on_attach = lspformat.on_attach }
 
 keymap("n", "gr", ":Telescope lsp_references<CR>", opts)
 keymap("n", "gd", ":Telescope lsp_definitions<CR>", opts)
@@ -199,25 +230,27 @@ keymap("n", "<F10>", "<Plug>VimspectorStepOver", opts)
 keymap("n", "<F11>", "<Plug>VimspectorStepInto", opts)
 keymap("n", "<F9>", ":call vimspector#ToggleBreakpoint<CR>", opts)
 
+-- api.nvim_create_autocmd("BufRead", { pattern = "*.cs", command = [[nvimtree.toggle(false, true)]] })
+
 -- Global variables
-vim.g.NERDTreeMinimalUI = 1;
+
 vim.wo.number = true
 vim.opt.termguicolors = true
 
--- vim.cmd('colorscheme desert')
-
-require('ayu').setup({
+-- Visuals
+ayu.setup({
     mirage = true, -- Set to `true` to use `mirage` variant instead of `dark` for dark background.
     overrides = {}, -- A dictionary of group names, each associated with a dictionary of parameters (`bg`, `fg`, `sp` and `style`) and colors in hex.
 })
 
-require('ayu').colorscheme()
+ayu.colorscheme()
 
-require('lualine').setup({
+lualine.setup({
   options = {
     theme = 'ayu',
   },
 })
+
 EOF
 
 function! s:TeleTab()
@@ -256,9 +289,8 @@ let g:SuperTabDefaultCompletionType = "<c-n>"
 set splitbelow
 
 
-autocmd BufRead *.cs NERDTreeFind | wincmd w
 autocmd VimEnter * :10sp | term
 
 au VimEnter * wincmd w
 
-hi Pmenu        ctermfg=black ctermbg=black gui=NONE guifg=#98fb98 guibg=#6d6d6d  
+"hi Pmenu        ctermfg=black ctermbg=black gui=NONE guifg=#98fb98 guibg=#6d6d6d  
