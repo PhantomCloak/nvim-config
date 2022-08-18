@@ -4,7 +4,7 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 
 " Dependencies
 Plug 'nvim-lua/plenary.nvim'
-
+Plug 'tami5/sqlite.lua'
 " Quality of life
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
@@ -19,6 +19,9 @@ Plug 'junegunn/seoul256.vim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'kyazdani42/nvim-tree.lua'
+Plug 'norcalli/nvim-colorizer.lua'
+Plug 'folke/trouble.nvim'
+Plug 'stevearc/dressing.nvim'
 
 " Code Analaysis & Formatting & Debugging
 Plug 'liuchengxu/vim-clap'
@@ -29,10 +32,13 @@ Plug 'jremmen/vim-ripgrep'
 Plug 'ptzz/lf.vim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'LinArcX/telescope-env.nvim'
+Plug 'gbrlsnchs/telescope-lsp-handlers.nvim'
 Plug 's1n7ax/nvim-terminal'
 Plug 'voldikss/vim-floaterm'
 Plug 'airblade/vim-rooter'
-
+Plug 'FeiyouG/command_center.nvim'
+Plug 'nvim-telescope/telescope-frecency.nvim'
+ 
 " Git
 Plug 'airblade/vim-gitgutter'
 Plug 'itchyny/vim-gitbranch'
@@ -48,156 +54,202 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'lukas-reineke/lsp-format.nvim'
+Plug 'SmiteshP/nvim-navic'
+
+Plug 'nvim-telescope/telescope-vimspector.nvim'
 
 Plug 'MaskRay/ccls'
-Plug 'OmniSharp/omnisharp-vim'
-
 
 
 if has('nvim')
-  function! UpdateRemotePlugins(...)
-    " Needed to refresh runtime files
-    let &rtp=&rtp
-    UpdateRemotePlugins
-  endfunction
+	function! UpdateRemotePlugins(...)
+		" Needed to refresh runtime files
+		let &rtp=&rtp
+		UpdateRemotePlugins
+	endfunction
 
-  Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
+	Plug 'gelguy/wilder.nvim', { 'do': function('UpdateRemotePlugins') }
 endif
 
 call plug#end()
 
 " show command pop-up
 call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_palette_theme({
-      \ 'border': 'rounded',
-      \ 'max_height': '75%',
-      \ 'min_height': 0,
-      \ 'prompt_position': 'top',
-      \ 'reverse': 0,
-      \ })))
+			\ 'border': 'rounded',
+			\ 'max_height': '75%',
+			\ 'min_height': 0,
+			\ 'prompt_position': 'top',
+			\ 'reverse': 0,
+			\ })))
 
 call wilder#setup({'modes': [':', '/', '?']})
 if has('patch-8.1.1880')
-  set completeopt=longest,menuone,popuphidden
-  set completepopup=highlight:Pmenu,border:off
+	set completeopt=longest,menuone,popuphidden
+	set completepopup=highlight:Pmenu,border:off
 endif
 
+set termguicolors
 lua << EOF
 
- cfg = {
-  debug = false, 
-  log_path = vim.fn.stdpath("cache") .. "/lsp_signature.log", 
-  verbose = false, 
-  bind = true, 
-  doc_lines = 10, 
-  max_height = 12, 
-  max_width = 80, 
-  wrap = true, 
-  floating_window = true, 
-  floating_window_above_cur_line = true, 
-  floating_window_off_x = 1, 
-  floating_window_off_y = 0, 
-  close_timeout = 4000, 
-  fix_pos = false,  
-  hint_enable = false, 
-  hi_parameter = "LspSignatureActiveParameter", 
-  handler_opts = {
-    border = "rounded" 
-  },
-  always_trigger = false,
-  auto_close_after = nil, 
-  extra_trigger_chars = {"(",",",", "}, 
-  zindex = 200, 
-  padding = '', 
-  transparency = nil, 
-  shadow_blend = 36, 
-  shadow_guibg = 'Black', 
-  timer_interval = 100, 
-  toggle_key = nil, 
-  select_signature_key = nil, 
-  move_cursor_key = nil, 
+cfg = {
+	debug = false, 
+	log_path = vim.fn.stdpath("cache") .. "/lsp_signature.log", 
+	verbose = false, 
+	bind = true, 
+	doc_lines = 10, 
+	max_height = 12, 
+	max_width = 80, 
+	wrap = true, 
+	floating_window = true, 
+	floating_window_above_cur_line = true, 
+	floating_window_off_x = 1, 
+	floating_window_off_y = 0, 
+	close_timeout = 4000, 
+	fix_pos = false,  
+	hint_enable = false, 
+	hi_parameter = "LspSignatureActiveParameter", 
+	handler_opts = {
+		border = "rounded" 
+		},
+	always_trigger = false,
+	auto_close_after = nil, 
+	extra_trigger_chars = {"(",",",", "}, 
+	zindex = 200, 
+	padding = '', 
+	transparency = nil, 
+	shadow_blend = 36, 
+	shadow_guibg = 'Black', 
+	timer_interval = 250, 
+	toggle_key = nil, 
+	select_signature_key = nil, 
+	move_cursor_key = nil, 
 }
+
 
 local telescope = require('telescope')
 local nvimtree = require('nvim-tree')
 
 local ayu = require('ayu')
 local lualine = require('lualine')
+local dressing = require('dressing')
 
 local cmp = require('cmp')
 local cmpnvimlsp = require('cmp_nvim_lsp')
 local lspconfig = require('lspconfig')
 local lspsignature = require('lsp_signature')
 local lspformat = require('lsp-format')
+local navic = require('nvim-navic')
+local trouble = require('trouble')
 
 local keymap = vim.api.nvim_set_keymap
 local opts = { noremap = true, silent = true } 
 local api = vim.api
 
+navic.setup {
+	highlight = true
+}
+-- Visuals
+trouble.setup {
+	mode = "document_diagnostics",
+	auto_fold = true,
+	padding = false,
+	auto_open = true,
+	auto_close = true,
+	}
+
+dressing.setup({})
+
 nvimtree.setup({
-  sort_by = "case_sensitive",
-  view = {
-    adaptive_size = true,
-    mappings = {
-      list = {
-        { key = "u", action = "dir_up" },
-      },
-    },
-  },
-  renderer = {
-    group_empty = true,
-    highlight_opened_files = "icon",
-  },
-  update_focused_file = {
-        enable = true,
-        ignore_list = {},
-  },
-  filters = {
-    dotfiles = true,
-  },
+open_on_tab = true,
+sort_by = "case_sensitive",
+open_on_setup = true,
+open_on_setup_file = true,
+view = {
+	adaptive_size = true,
+	centralize_selection = true,
+	mappings = {
+		list = {
+			{ key = "u", action = "dir_up" },
+			},
+		},
+	},
+renderer = {
+	group_empty = true,
+	highlight_opened_files = "all",
+	highlight_git = true
+	},
+update_focused_file = {
+	enable = true,
+	ignore_list = {},
+	},
+filters = {
+	dotfiles = true,
+	custom = {"*.meta"}
+	},
+diagnostics = {
+	enable = true
+	},
+float = {
+	enable = true
+	}
 })
+
+ayu.setup({
+mirage = true, -- Set to `true` to use `mirage` variant instead of `dark` for dark background.
+overrides = {}, -- A dictionary of group names, each associated with a dictionary of parameters (`bg`, `fg`, `sp` and `style`) and colors in hex.
+})
+ayu.colorscheme()
+lualine.setup({ options = { theme = 'ayu', }, })
+
 
 -- Telescope
 telescope.setup({
-    defaults = {
-        file_ignore_patterns = { "^./.git/", "^node_modules/", "^vendor/", "%.meta",
+defaults = {
+	file_ignore_patterns = { "^./.git/", "^node_modules/", "^vendor/", "%.meta",
 	"%.asset","%.unity", "%.ttf", "%.png", "%.jpg", "%.prefab", "%.ogg",
 	"%.anim", "%.fbx", "%.obj", "%.tga", "%.shader", "%.swcode", "%.mat",
 	"%.vfx", "%.FBX", "%.asmdef", "%.controller", "%.dll", "%.TGA",
 	"%.file"},
-    }
+	}
 })
 
 telescope.load_extension('env')
+telescope.load_extension('command_center')
+telescope.load_extension('lsp_handlers')
+telescope.load_extension('vimspector')
+telescope.load_extension('frecency')
+
 
 -- LSP Itself
 cmp.setup {
-    mapping = {
-	['<Tab>'] = cmp.mapping.select_next_item(),
-	['<S-Tab>'] = cmp.mapping.select_prev_item(),
-	['<CR>'] = cmp.mapping.confirm({
-	behavior = cmp.ConfirmBehavior.Replace,
-	select = true,
-	})
-    },
+	mapping = {
+		['<Tab>'] = cmp.mapping.select_next_item(),
+		['<S-Tab>'] = cmp.mapping.select_prev_item(),
+		['<CR>'] = cmp.mapping.confirm({
+		behavior = cmp.ConfirmBehavior.Replace,
+		select = true,
+		})
+	},
 sources = {
-    { name = 'nvim_lsp' },
-    }
+	{ name = 'nvim_lsp' },
+	}
 }
 
 lspconfig.omnisharp.setup {
-  capabilities = cmpnvimlsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-  on_attach = function(_, bufnr)
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-  end,
-  cmd = { "/Users/unalozyurt/Downloads/omnisharp-osx-x64-net6.0/OmniSharp", "--languageserver" , "--hostPID", tostring(pid) },
-}
+	capabilities = cmpnvimlsp.update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+	on_attach = function(client, bufnr)
+	vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+	navic.attach(client, bufnr)
+	end,
+	cmd = { "/Users/unalozyurt/Downloads/omnisharp-osx-x64-net6.0/OmniSharp", "--languageserver" , "--hostPID", tostring(pid) },
+	}
 
 -- LSP Signature Help
 lspsignature.setup(cfg)
 
 -- LSP Formatter
 lspformat.setup {}
-lspconfig.gopls.setup { on_attach = lspformat.on_attach }
+lspconfig.omnisharp.setup { on_attach = lspformat.on_attach }
 
 keymap("n", "gr", ":Telescope lsp_references<CR>", opts)
 keymap("n", "gd", ":Telescope lsp_definitions<CR>", opts)
@@ -209,6 +261,7 @@ keymap("n", "<leader>ca", ":%Telescope lsp_range_code_actions", opts)
 keymap("n", "<F3>", ":Telescope find_files<CR>", opts)
 keymap("n", "<F4>", ":Telescope live_grep<CR>", opts)
 keymap("n", "ff", ":lua require'telescope.builtin'.live_grep({grep_open_files=true})<CR>", opts)
+keymap("n", "tn", ":tabedit "..  vim.fn.getcwd() .."| Telescope find_files<CR>", opts)
 
 -- LSP
 keymap("n", "rn", ":lua lua.vim.lsp.buf.rename()<CR>", opts)
@@ -229,68 +282,20 @@ keymap("n", "<F5>", ":call vimspector#Continue<CR>", opts)
 keymap("n", "<F10>", "<Plug>VimspectorStepOver", opts)
 keymap("n", "<F11>", "<Plug>VimspectorStepInto", opts)
 keymap("n", "<F9>", ":call vimspector#ToggleBreakpoint<CR>", opts)
+keymap("n", "<leader>fc", ":Telescope command_center<CR>", opts)
 
--- api.nvim_create_autocmd("BufRead", { pattern = "*.cs", command = [[nvimtree.toggle(false, true)]] })
+vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 
--- Global variables
+vim.api.nvim_set_hl(0, "NavicText",{default = false, bg = "#1f2430", fg = "#73d0ff"})
+vim.api.nvim_set_hl(0, "NavicIconsMethod",{default = false, bg = "#1f2430", fg = "#c078b8"})
+vim.api.nvim_set_hl(0, "NavicIconsClass",{default = false, bg = "#1f2430", fg = "#c078b8"})
+vim.api.nvim_set_hl(0, "NavicIconsNamespace",{default = false, bg = "#1f2430", fg = "#c078b8"})
+
 
 vim.wo.number = true
 vim.opt.termguicolors = true
-
--- Visuals
-ayu.setup({
-    mirage = true, -- Set to `true` to use `mirage` variant instead of `dark` for dark background.
-    overrides = {}, -- A dictionary of group names, each associated with a dictionary of parameters (`bg`, `fg`, `sp` and `style`) and colors in hex.
-})
-
-ayu.colorscheme()
-
-lualine.setup({
-  options = {
-    theme = 'ayu',
-  },
-})
-
 EOF
 
-function! s:TeleTab()
-    tabedit pwd
-    Telescope find_files
-endfunction
-
-" Tabs
-noremap tn  :call <SID>TeleTab()<CR>
-
-
-" make highlighting better for omnisharp
-let g:OmniSharp_highlight_groups = {
-	    \ 'ExcludedCode': 'NonText',
-	    \ 'ClassName': 'Type',
-	    \ 'EnumName': 'Type',
-	    \ 'NamespaceName': 'Include',
-	    \ 'RegexComment': 'Comment',
-	    \ 'RegexCharacterClass': 'Character',
-	    \ 'RegexAnchor': 'Type',
-	    \ 'RegexQuantifier': 'Number',
-	    \ 'RegexGrouping': 'Macro',
-	    \ 'RegexAlternation': 'Identifier',
-	    \ 'RegexText': 'String',
-	    \ 'RegexSelfEscapedCharacter': 'Delimiter',
-	    \ 'LocalName': 0,
-	    \ 'PropertyName': 0,
-	    \ 'ParameterName': 0,
-	    \ 'FieldName': 0
-	    \}
-
-" Git
 let g:SuperTabDefaultCompletionType = "<c-n>"
 
-
-set splitbelow
-
-
-autocmd VimEnter * :10sp | term
-
-au VimEnter * wincmd w
-
-"hi Pmenu        ctermfg=black ctermbg=black gui=NONE guifg=#98fb98 guibg=#6d6d6d  
+set title titlestring=🦊\ %(%{expand(\"%:~:.:h\")}%)/%t\ -\ NVim
