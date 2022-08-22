@@ -1,10 +1,6 @@
 " Plugins will be downloaded under the specified directory.
 
-call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
-
-"Dependencies
-Plug 'nvim-lua/plenary.nvim'
-Plug 'tami5/sqlite.lua'
+call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged') "Dependencies Plug 'nvim-lua/plenary.nvim' Plug 'tami5/sqlite.lua'
 " Quality of life
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
@@ -32,6 +28,7 @@ Plug 'folke/tokyonight.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'onsails/lspkind.nvim'
 Plug 'yamatsum/nvim-nonicons'
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 
 " Code Analaysis & Formatting & Debugging
 Plug 'liuchengxu/vim-clap'
@@ -68,6 +65,7 @@ Plug 'lukas-reineke/lsp-format.nvim'
 Plug 'SmiteshP/nvim-navic'
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'nvim-telescope/telescope-vimspector.nvim'
 
@@ -104,6 +102,31 @@ endif
 set termguicolors
 lua << EOF
 --require("scrollbar").setup({})
+
+require'nvim-treesitter.configs'.setup {
+	-- A list of parser names, or "all"
+	ensure_installed = { "c", "lua", "rust" },
+	sync_install = false,
+	auto_install = true,
+	ignore_install = { "javascript" },
+	textobjects ={
+	move = {
+		enable = true,
+		set_jumps = true,
+		goto_next_end = {
+			["]]"] = {"@function.outer", "@class.outer"},
+			},
+		goto_previous_start = {
+			["[["] = {"@function.outer", "@class.outer"},
+			},
+		},
+	},
+highlight = {
+	enable = true,
+	additional_vim_regex_highlighting = false,
+	},
+}
+
 require("mason").setup()
 require("lsp-colors").setup({})
 require'bufferline'.setup({})
@@ -253,7 +276,8 @@ navic.setup {
 	icons = {
 		Namespace = " ",
 		Class = " ",
-		Method = " "
+		Method = " ",
+		Function = " "
 		}
 	}
 
@@ -386,8 +410,8 @@ keymap("n", "<C-l>", "<C-w>l", opts)
 
 keymap("n", "rr", ":q<CR>", opts)
 
-keymap('n', '<A-,>', '<Cmd>BufferPrevious<CR>', opts)
-keymap('n', '<A-.>', '<Cmd>BufferNext<CR>', opts)
+--keymap('n', '<A-,>', '<Cmd>BufferPrevious<CR>', opts)
+--keymap('n', '<A-.>', '<Cmd>BufferNext<CR>', opts)
 
 vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 
@@ -396,6 +420,8 @@ vim.api.nvim_set_hl(0, "NavicIconsMethod",{default = false, bg = "#1f2430", fg =
 vim.api.nvim_set_hl(0, "NavicIconsClass",{default = false, bg = "#1f2430", fg = "#c078b8"})
 vim.api.nvim_set_hl(0, "NavicIconsNamespace",{default = false, bg = "#1f2430", fg = "#c078b8"})
 
+--keymap('n', '<C-,>', '<Cmd>BufferPrevious<CR>', opts)
+keymap('n', '<C-.>', '<Cmd>BufferNext<CR>', opts)
 vim.wo.number = true
 vim.opt.termguicolors = true
 
@@ -405,7 +431,7 @@ EOF
 
 let g:SuperTabDefaultCompletionType = "<c-n>"
 
-set title titlestring=🦊\ %(%{expand(\"%:~:.:h\")}%)/%t\ -\ NVim
+set title titlestring=🦊\ %(%{expand(\"%:~:.:h\")}%)/%t\ -\ NVim\ 🦊
 
 set tabstop=4
 set shiftwidth=4
@@ -414,4 +440,4 @@ set laststatus=3
 let g:minimap_width = 10
 autocmd BufEnter *.cs :call timer_start(200, { tid -> execute('Minimap')})
 autocmd BufEnter *.cpp :call timer_start(200, { tid -> execute('Minimap')})
-highlight ScrollbarHandle guibg=#FFFFFF guifg=0x000000    
+highlight ScrollbarHandle guibg=#FFFFFF guifg=0x000000    let g:netrw_bufsettings = 'noma nomod nonu nowrap ro buflisted' nnoremap <silent>    <C-n> <Cmd>BufferPrevious<CR> nnoremap <silent>    <C-m> <Cmd>BufferNext<CR> let g:lightline={ 'enable': {'statusline': 1, 'tabline': 0} }
