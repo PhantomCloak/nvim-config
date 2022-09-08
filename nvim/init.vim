@@ -4,11 +4,11 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged') "
 " Quality of life
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
-Plug 'ervandew/supertab'
 Plug 'wellle/targets.vim'
 Plug 'kevinhwang91/nvim-bqf'
 Plug 'ten3roberts/qf.nvim'
-Plug 'Pocco81/auto-save.nvim'
+Plug 'ervandew/supertab'
+"Plug 'Pocco81/auto-save.nvim'
 Plug 'windwp/nvim-autopairs'
 Plug 'romgrk/barbar.nvim'
 Plug 'luukvbaal/stabilize.nvim'
@@ -45,7 +45,6 @@ Plug 's1n7ax/nvim-terminal'
 Plug 'voldikss/vim-floaterm'
 Plug 'airblade/vim-rooter'
 Plug 'FeiyouG/command_center.nvim'
-Plug 'nvim-telescope/telescope-frecency.nvim'
 Plug 'petertriho/nvim-scrollbar'
  
 " Git
@@ -66,8 +65,11 @@ Plug 'SmiteshP/nvim-navic'
 Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'Hoffs/omnisharp-extended-lsp.nvim'
 
 Plug 'nvim-telescope/telescope-vimspector.nvim'
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
 
 Plug 'MaskRay/ccls'
 
@@ -135,9 +137,9 @@ cfg = {
 	log_path = vim.fn.stdpath("cache") .. "/lsp_signature.log", 
 	verbose = false, 
 	bind = true, 
-	doc_lines = 10, 
-	max_height = 12, 
-	max_width = 80, 
+	doc_lines = 2, 
+	max_height = 7, 
+	max_width = 150, 
 	wrap = true, 
 	floating_window = true, 
 	floating_window_above_cur_line = true, 
@@ -155,16 +157,74 @@ cfg = {
 	extra_trigger_chars = {"(",",",", "}, 
 	zindex = 200, 
 	padding = '', 
-	transparency = nil, 
+	transparency = 100, 
 	shadow_blend = 36, 
 	shadow_guibg = 'Black', 
-	timer_interval = 250, 
+	timer_interval = 200, 
+	hi_parameter = "LspSignatureActiveParameter", -- how your parameter will be highlight
 	toggle_key = nil, 
 	select_signature_key = nil, 
 	move_cursor_key = nil, 
 }
 
 require'qf'.setup{}
+
+require("dapui").setup({
+  icons = { expanded = "▾", collapsed = "▸", current_frame = "▸" },
+  mappings = {
+    -- Use a table to apply multiple mappings
+    expand = { "<CR>", "<2-LeftMouse>" },
+    open = "o",
+    remove = "d",
+    edit = "e",
+    repl = "r",
+    toggle = "t",
+  },
+  -- Expand lines larger than the window
+  -- Requires >= 0.7
+  expand_lines = vim.fn.has("nvim-0.7"),
+  -- Layouts define sections of the screen to place windows.
+  -- The position can be "left", "right", "top" or "bottom".
+  -- The size specifies the height/width depending on position. It can be an Int
+  -- or a Float. Integer specifies height/width directly (i.e. 20 lines/columns) while
+  -- Float value specifies percentage (i.e. 0.3 - 30% of available lines/columns)
+  -- Elements are the elements shown in the layout (in order).
+  -- Layouts are opened in order so that earlier layouts take priority in window sizing.
+  layouts = {
+    {
+      elements = {
+      -- Elements can be strings or table with id and size keys.
+        { id = "scopes", size = 0.25 },
+        "breakpoints",
+        "stacks",
+        "watches",
+      },
+      size = 40, -- 40 columns
+      position = "left",
+    },
+    {
+      elements = {
+        "repl",
+        "console",
+      },
+      size = 0.25, -- 25% of total lines
+      position = "bottom",
+    },
+  },
+  floating = {
+    max_height = nil, -- These can be integers or a float between 0 and 1.
+    max_width = nil, -- Floats will be treated as percentage of your screen.
+    border = "single", -- Border style. Can be "single", "double" or "rounded"
+    mappings = {
+      close = { "q", "<Esc>" },
+    },
+  },
+  windows = { indent = 1 },
+  render = {
+    max_type_length = nil, -- Can be integer or nil.
+    max_value_lines = 100, -- Can be integer or nil.
+  }
+})
 
 require("nvim-tree").setup { -- BEGIN_DEFAULT_OPTS
 auto_reload_on_write = false,
@@ -320,32 +380,36 @@ telescope.load_extension('env')
 telescope.load_extension('command_center')
 telescope.load_extension('lsp_handlers')
 telescope.load_extension('vimspector')
-telescope.load_extension('frecency')
 
 
 -- LSP Itself
 local lspkind = require('lspkind')
 
 cmp.setup {
+	appearance = {
+		menu = {
+			direction = 'below' -- auto or above or below
+			}
+		},
 	formatting = {
 		format = lspkind.cmp_format({
 		mode = 'symbol_text', -- show only symbol annotations
-		maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+		raxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
 		})
 	},
 mapping = {
 	['<Tab>'] = cmp.mapping.select_next_item(),
 	['<S-Tab>'] = cmp.mapping.select_prev_item(),
-	['<CR>'] = cmp.mapping.confirm({
-	behavior = cmp.ConfirmBehavior.Replace,
-	select = true,
-	})
-},
+	['<CR>'] = cmp.mapping.confirm({behavior = cmp.ConfirmBehavior.Replace,select = false})
+	},
 sources = {
 	{ name = 'nvim_lsp' },
-	}
+	},
+preselect = cmp.PreselectMode.None
 }
 
+
+require"nvim-tree.view".View.winopts.cursorline = true
 
 lspformat.setup {}
 
@@ -357,6 +421,9 @@ lspconfig.omnisharp.setup {
 	navic.attach(client, bufnr)
 	lspformat.on_attach(client)
 	end,
+	handlers = {
+		["textDocument/definition"] = require('omnisharp_extended').handler,
+		},
 	cmd = { "/Users/unalozyurt/Downloads/omnisharp-osx-arm64-net6.0/OmniSharp", "--languageserver" , "--hostPID", tostring(pid) },
 	}
 
@@ -366,22 +433,73 @@ lspconfig.clangd.setup{
 	navic.attach(client, bufnr)
 	end
 }
+
+
+
+
+
+
+
+local dap = require('dap')
+local dapui = require('dapui')
+
+
+dap.adapters.codelldb = {
+  type = 'server',
+  host = '127.0.0.1',
+  port = 13000
+}
+dap.configurations.c = {
+    {
+        type = "codelldb",
+        request = "launch",
+        cwd = '${workspaceFolder}',
+        terminal = 'integrated',
+        console = 'integratedTerminal',
+        stopOnEntry = false,
+        program = function()
+            return vim.fn.input('executable: ', vim.fn.getcwd() .. '/', 'file')
+        end
+    }
+}
+
+
+dap.configurations.cpp = dap.configurations.c
+dap.configurations.rust = dap.configurations.cpp
+-- repl setup
+dap.repl.commands = vim.tbl_extend('force', dap.repl.commands, {
+    exit = { 'q', 'exit' },
+    custom_commands = {
+        ['.run_to_cursor'] = dap.run_to_cursor,
+        ['.restart'] = dap.run_last
+    }
+})
+
+
+
+
+
+local omni_extend = require('omnisharp_extended');
+
 -- LSP Signature Help
 lspsignature.setup(cfg)
 keymap("n", "gr", ":Telescope lsp_references<CR>", opts)
-keymap("n", "gd", ":Telescope lsp_definitions<CR>", opts)
+
+--keymap("n", "gd",":lua require('omnisharp_extended').telescope_lsp_definitions()<CR>", opts)
+keymap("n", "gd",":Telescope lsp_definition<CR>", opts)
+
 
 -- Telescope
 keymap("n", "<leader>dD", ":Telescope lsp_document_diagnostics<CR>", opts)
 keymap("n", "<leader>dW", ":Telescope lsp_workspace_diagnostics<CR>", opts)
 keymap("n", "<leader>ca", ":%Telescope lsp_range_code_actions", opts)
-keymap("n", "<F3>", ":Telescope find_files<CR>", opts)
+keymap("n", "<F3>", ":lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({}))<CR>", opts)
 keymap("n", "<F4>", ":Telescope live_grep<CR>", opts)
 keymap("n", "ff", ":lua require'telescope.builtin'.live_grep({grep_open_files=true})<CR>", opts)
 keymap("n", "tn", ":tabedit "..  vim.fn.getcwd() .."| Telescope find_files<CR>", opts)
 
 -- LSP
-keymap("n", "rn", ":lua lua.vim.lsp.buf.rename()<CR>", opts)
+keymap("n", "rn", ":lua vim.lsp.buf.rename()<CR>", opts)
 keymap("n", "gr", ":Telescope lsp_references<CR>", opts)
 
 keymap("n", "<leader>co",":lua vim.lsp.buf.code_action()<CR>", opts)
@@ -391,11 +509,13 @@ keymap("n", "<leader>lg", ":LazyGit<CR>", opts)
 keymap("n", "<leader>gb", ":Git blame<CR>", opts)
 keymap("n", "<leader>ggb", ":GBrowse<CR>", opts)
 keymap("n", "<leader>gv", ":GV?<CR>", opts)
+keymap("n", "<leader>gs", ":Gdiffsplit!<CR>", opts)
+
 
 -- Vimspector
 keymap("n", "<leader>dd", ":call vimspector#Launch()<CR>", opts)
 keymap("n", "<leader>dr", ":call vimspector#Reset<CR>", opts)
-keymap("n", "<leader>vp", ":<Plug>vimspectorBalloonEval", opts)
+keymap("n", "<leader>bb", ":<Plug>vimspectorBalloonEval", opts)
 keymap("n", "<leader>ds", ":<Plug>VimspectorStop", opts)
 keymap("n", "<F5>", ":call vimspector#Continue<CR>", opts)
 keymap("n", "<F10>", "<Plug>VimspectorStepOver", opts)
@@ -420,6 +540,8 @@ vim.api.nvim_set_hl(0, "NavicIconsMethod",{default = false, bg = "#1f2430", fg =
 vim.api.nvim_set_hl(0, "NavicIconsClass",{default = false, bg = "#1f2430", fg = "#c078b8"})
 vim.api.nvim_set_hl(0, "NavicIconsNamespace",{default = false, bg = "#1f2430", fg = "#c078b8"})
 
+vim.o.signcolumn = 'yes:2'
+
 --keymap('n', '<C-,>', '<Cmd>BufferPrevious<CR>', opts)
 keymap('n', '<C-.>', '<Cmd>BufferNext<CR>', opts)
 vim.wo.number = true
@@ -440,4 +562,14 @@ set laststatus=3
 let g:minimap_width = 10
 autocmd BufEnter *.cs :call timer_start(200, { tid -> execute('Minimap')})
 autocmd BufEnter *.cpp :call timer_start(200, { tid -> execute('Minimap')})
-highlight ScrollbarHandle guibg=#FFFFFF guifg=0x000000    let g:netrw_bufsettings = 'noma nomod nonu nowrap ro buflisted' nnoremap <silent>    <C-n> <Cmd>BufferPrevious<CR> nnoremap <silent>    <C-m> <Cmd>BufferNext<CR> let g:lightline={ 'enable': {'statusline': 1, 'tabline': 0} }
+highlight ScrollbarHandle guibg=#FFFFFF guifg=0x000000 
+let g:netrw_bufsettings = 'noma nomod nonu nowrap ro buflisted' 
+
+nnoremap <silent>  <C-n> <Cmd>BufferPrevious<CR>
+nnoremap <silent>    <C-m> <Cmd>BufferNext<CR>
+nnoremap <silent>    <C-c> <Cmd>BufferClose<CR>
+
+let g:lightline={ 'enable': {'statusline': 1, 'tabline': 0} }
+let g:neovide_cursor_animation_length=0
+let g:neovide_cursor_trail_length=0
+
