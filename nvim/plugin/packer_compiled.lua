@@ -9,23 +9,26 @@ vim.api.nvim_command('packadd packer.nvim')
 
 local no_errors, error_msg = pcall(function()
 
-  local time
-  local profile_info
-  local should_profile = false
-  if should_profile then
-    local hrtime = vim.loop.hrtime
-    profile_info = {}
-    time = function(chunk, start)
-      if start then
-        profile_info[chunk] = hrtime()
-      else
-        profile_info[chunk] = (hrtime() - profile_info[chunk]) / 1e6
-      end
+_G._packer = _G._packer or {}
+_G._packer.inside_compile = true
+
+local time
+local profile_info
+local should_profile = false
+if should_profile then
+  local hrtime = vim.loop.hrtime
+  profile_info = {}
+  time = function(chunk, start)
+    if start then
+      profile_info[chunk] = hrtime()
+    else
+      profile_info[chunk] = (hrtime() - profile_info[chunk]) / 1e6
     end
-  else
-    time = function(chunk, start) end
   end
-  
+else
+  time = function(chunk, start) end
+end
+
 local function save_profiles(threshold)
   local sorted_times = {}
   for chunk_name, time_taken in pairs(profile_info) do
@@ -38,8 +41,10 @@ local function save_profiles(threshold)
       results[i] = elem[1] .. ' took ' .. elem[2] .. 'ms'
     end
   end
+  if threshold then
+    table.insert(results, '(Only showing plugins that took longer than ' .. threshold .. ' ms ' .. 'to load)')
+  end
 
-  _G._packer = _G._packer or {}
   _G._packer.profile_output = results
 end
 
@@ -69,10 +74,15 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
-  ["barbar.nvim"] = {
+  LuaSnip = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/barbar.nvim",
-    url = "https://github.com/romgrk/barbar.nvim"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/LuaSnip",
+    url = "https://github.com/L3MON4D3/LuaSnip"
+  },
+  ["bufdelete.nvim"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/bufdelete.nvim",
+    url = "https://github.com/famiu/bufdelete.nvim"
   },
   ["bufferline.nvim"] = {
     loaded = true,
@@ -84,10 +94,35 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
     url = "https://github.com/hrsh7th/cmp-nvim-lsp"
   },
+  cmp_luasnip = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
+    url = "https://github.com/saadparwaiz1/cmp_luasnip"
+  },
   ["dressing.nvim"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/dressing.nvim",
     url = "https://github.com/stevearc/dressing.nvim"
+  },
+  ["friendly-snippets"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/friendly-snippets",
+    url = "https://github.com/rafamadriz/friendly-snippets"
+  },
+  fzf = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/fzf",
+    url = "https://github.com/junegunn/fzf"
+  },
+  ["fzf.vim"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/fzf.vim",
+    url = "https://github.com/junegunn/fzf.vim"
+  },
+  ["impatient.nvim"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/impatient.nvim",
+    url = "https://github.com/lewis6991/impatient.nvim"
   },
   ["lazygit.nvim"] = {
     loaded = true,
@@ -124,15 +159,20 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/mason.nvim",
     url = "https://github.com/williamboman/mason.nvim"
   },
-  ["minimap.vim"] = {
+  ["neoterm.nvim"] = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/minimap.vim",
-    url = "https://github.com/wfxr/minimap.vim"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/neoterm.nvim",
+    url = "https://github.com/itmecho/neoterm.nvim"
   },
   ["neovim-ayu"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/neovim-ayu",
     url = "https://github.com/Shatur/neovim-ayu"
+  },
+  ["nightfox.nvim"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nightfox.nvim",
+    url = "https://github.com/EdenEast/nightfox.nvim"
   },
   ["nvim-autopairs"] = {
     loaded = true,
@@ -164,6 +204,11 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
     url = "https://github.com/neovim/nvim-lspconfig"
   },
+  ["nvim-lspfuzzy"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-lspfuzzy",
+    url = "https://github.com/ojroques/nvim-lspfuzzy"
+  },
   ["nvim-navic"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-navic",
@@ -184,6 +229,11 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
+  ["nvim-treesitter-context"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-treesitter-context",
+    url = "https://github.com/nvim-treesitter/nvim-treesitter-context"
+  },
   ["nvim-treesitter-textobjects"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-treesitter-textobjects",
@@ -199,10 +249,25 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/omnisharp-extended-lsp.nvim",
     url = "https://github.com/Hoffs/omnisharp-extended-lsp.nvim"
   },
+  ["onedark.nvim"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/onedark.nvim",
+    url = "https://github.com/navarasu/onedark.nvim"
+  },
+  ["onenord.nvim"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/onenord.nvim",
+    url = "https://github.com/rmehri01/onenord.nvim"
+  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
+  },
+  playground = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/playground",
+    url = "https://github.com/nvim-treesitter/playground"
   },
   ["plenary.nvim"] = {
     loaded = true,
@@ -214,15 +279,15 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/qf.nvim",
     url = "https://github.com/ten3roberts/qf.nvim"
   },
-  ["telescope-command-palette.nvim"] = {
+  ["smart-splits.nvim"] = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/telescope-command-palette.nvim",
-    url = "https://github.com/LinArcX/telescope-command-palette.nvim"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/smart-splits.nvim",
+    url = "https://github.com/mrjones2014/smart-splits.nvim"
   },
-  ["telescope-lsp-handlers.nvim"] = {
+  ["sterm.nvim"] = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/telescope-lsp-handlers.nvim",
-    url = "https://github.com/gbrlsnchs/telescope-lsp-handlers.nvim"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/sterm.nvim",
+    url = "https://github.com/Hvassaa/sterm.nvim"
   },
   ["telescope.nvim"] = {
     loaded = true,
@@ -234,14 +299,46 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/trouble.nvim",
     url = "https://github.com/folke/trouble.nvim"
   },
+  ["vim-fugitive"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vim-fugitive",
+    url = "https://github.com/tpope/vim-fugitive"
+  },
+  ["vim-gitbranch"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vim-gitbranch",
+    url = "https://github.com/itchyny/vim-gitbranch"
+  },
+  ["vim-gitgutter"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vim-gitgutter",
+    url = "https://github.com/airblade/vim-gitgutter"
+  },
+  ["vim-rhubarb"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vim-rhubarb",
+    url = "https://github.com/tpope/vim-rhubarb"
+  },
   ["vim-ripgrep"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vim-ripgrep",
     url = "https://github.com/jremmen/vim-ripgrep"
+  },
+  ["vscode.nvim"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vscode.nvim",
+    url = "https://github.com/Mofiqul/vscode.nvim"
   }
 }
 
 time([[Defining packer_plugins]], false)
+
+_G._packer.inside_compile = false
+if _G._packer.needs_bufread == true then
+  vim.cmd("doautocmd BufRead")
+end
+_G._packer.needs_bufread = false
+
 if should_profile then save_profiles() end
 
 end)

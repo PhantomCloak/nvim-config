@@ -41,66 +41,94 @@ packer.init({
 
 return packer.startup(function(use)
 
-	use({ "wbthomason/packer.nvim" })
+	use 'wbthomason/packer.nvim' 
+	use 'lewis6991/impatient.nvim'
 
+    -- COLORS
+    use 'rmehri01/onenord.nvim'
+    use "EdenEast/nightfox.nvim"
+    use 'navarasu/onedark.nvim'
+    use 'Mofiqul/vscode.nvim'
+    use 'nvim-treesitter/playground'
 	-- Dependencies
 
-	use({ "nvim-lua/plenary.nvim" }) 
-	use({ "kyazdani42/nvim-web-devicons" })
-	use({ "jremmen/vim-ripgrep" }) 
-	use({ "yamatsum/nvim-nonicons"}) -- The completion plugin
-	
-	-- Coding Quality Of Life
+	use 'nvim-lua/plenary.nvim'  
+	use 'kyazdani42/nvim-web-devicons' 
+	use 'jremmen/vim-ripgrep'  
+	use 'yamatsum/nvim-nonicons' -- The completion plugin
 
-	use({ "windwp/nvim-autopairs", commit = "a7a8be3d2f2473300d070293903ac8b95edeccc1" }) 
+    -- Coding Quality Of Life
+use('mrjones2014/smart-splits.nvim')
+    use 'windwp/nvim-autopairs'
+    use 'saadparwaiz1/cmp_luasnip'
+    use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})
+    use 'rafamadriz/friendly-snippets'
+    use 'famiu/bufdelete.nvim'
+    use 'Hvassaa/sterm.nvim'
+    use {
+        'ojroques/nvim-lspfuzzy',
+        requires = {
+            {'junegunn/fzf'},  -- to enable preview (optional)
+            {'junegunn/fzf.vim'},  -- to enable preview (optional)
+        },
+}
 
-	-- Navigation +++
+use 'itmecho/neoterm.nvim'
 
-	use({ "kyazdani42/nvim-tree.lua" })
-	use({ "romgrk/barbar.nvim" })
-	use({ "SmiteshP/nvim-navic" }) 
-	use ({'akinsho/bufferline.nvim', tag = "v2.*", requires = 'kyazdani42/nvim-web-devicons'})
-    use ({'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'})
-	use ({ "nvim-treesitter/nvim-treesitter-textobjects", requires = "kyazdani42/nvim-web-devicons"})
-	use({ "ten3roberts/qf.nvim" }) 
 
-	-- Interface
+--use {"akinsho/toggleterm.nvim", tag = '*', config = function()
+--  require("toggleterm").setup()
+--end}
 
-	use({ "Shatur/neovim-ayu" })
-	use({ "stevearc/dressing.nvim" }) -- The completion plugin
-	use({ "nvim-lualine/lualine.nvim" })
-	use({ "kevinhwang91/nvim-bqf"}) 
+-- Navigation +++
 
-	-- SCM
+use 'kyazdani42/nvim-tree.lua' 
+use 'SmiteshP/nvim-navic'  
+use { 'akinsho/bufferline.nvim', tag = 'v2.*' }
+use { 'nvim-treesitter/nvim-treesitter', run = 'TSUpdate' }
+use  'nvim-treesitter/nvim-treesitter-textobjects'
+use 'nvim-treesitter/nvim-treesitter-context'
+use 'ten3roberts/qf.nvim'  
+use {
+	'nvim-telescope/telescope.nvim', tag = '0.1.0',
+	-- or                            , branch = '0.1.x',
+	requires = { {'nvim-lua/plenary.nvim'} }
+}
+-- Interface
 
-	use({ "kdheepak/lazygit.nvim", commit = "9c73fd69a4c1cb3b3fc35b741ac968e331642600" }) -- The completion plugin
+use 'Shatur/neovim-ayu' 
+use 'stevearc/dressing.nvim'  
+use 'nvim-lualine/lualine.nvim' 
+use 'kevinhwang91/nvim-bqf' 
+
+-- SCM
+
+	use 'kdheepak/lazygit.nvim'
+	use 'tpope/vim-fugitive'
+	use 'tpope/vim-rhubarb'
+	use 'itchyny/vim-gitbranch'
+	use 'airblade/vim-gitgutter'
 	
 	-- LSP
 
-	use({ "neovim/nvim-lspconfig", commit = "568aa4d41e1150823ce8e5cbdea47278d3fddf36" }) -- enable LSP
-	use({ "hrsh7th/cmp-nvim-lsp", commit = "affe808a5c56b71630f17aa7c38e15c59fd648a8" }) 
-	use({ "hrsh7th/nvim-cmp", commit = "b1ebdb0a17daaad13606b802780313a32e59781b" }) 
-	use({ "ray-x/lsp_signature.nvim", commit = "e65a63858771db3f086c8d904ff5f80705fd962b" }) -- The completion plugin
+	use 'neovim/nvim-lspconfig' 
+	use 'hrsh7th/cmp-nvim-lsp'  
+	use 'hrsh7th/nvim-cmp'  
+	use 'ray-x/lsp_signature.nvim'  
 	
 	-- DAP
 
-	use({ "mfussenegger/nvim-dap" })
-	use({ "rcarriga/nvim-dap-ui" })
+	use 'mfussenegger/nvim-dap' 
+	use 'rcarriga/nvim-dap-ui' 
 
 	-- LSP Related
-	use({ "folke/lsp-colors.nvim" }) 
-	use({ "onsails/lspkind.nvim" }) 
-	use({ "lukas-reineke/lsp-format.nvim" }) 
-	use({ "wfxr/minimap.vim" }) 
-	use({ "williamboman/mason.nvim" }) 
-	use({ "Hoffs/omnisharp-extended-lsp.nvim" }) 
-	use { "folke/trouble.nvim", requires = "kyazdani42/nvim-web-devicons"}
-
-	-- Telescope
-
-	use { 'nvim-telescope/telescope.nvim', tag = '0.1.0', requires = { {'nvim-lua/plenary.nvim'} }}
-	use({ "gbrlsnchs/telescope-lsp-handlers.nvim" }) 
-	use { "LinArcX/telescope-command-palette.nvim" }
+	
+	use 'folke/lsp-colors.nvim'  
+	use 'onsails/lspkind.nvim'  
+	use 'lukas-reineke/lsp-format.nvim'  
+	use 'williamboman/mason.nvim'  
+	use 'Hoffs/omnisharp-extended-lsp.nvim'  
+	use { 'folke/trouble.nvim', requires = 'kyazdani42/nvim-web-devicons'}
 
 	-- Treesitter
 

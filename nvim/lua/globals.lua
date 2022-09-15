@@ -14,7 +14,6 @@
 
  lspkind = require("lspkind")
  lspconfig = require("lspconfig")
- cmp = require("cmp")
  cmpnvimlsp = require('cmp_nvim_lsp')
 
 dap = require('dap')
@@ -25,7 +24,6 @@ dapui = require('dapui')
  lspcolors = require("lsp-colors")
 
  navic = require("nvim-navic")
- telescope = require("telescope")
  lualine = require("lualine")
  trouble = require("trouble")
 
