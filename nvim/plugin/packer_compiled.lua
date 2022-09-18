@@ -119,6 +119,11 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/fzf.vim",
     url = "https://github.com/junegunn/fzf.vim"
   },
+  ["hop.nvim"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/hop.nvim",
+    url = "https://github.com/phaazon/hop.nvim"
+  },
   ["impatient.nvim"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/impatient.nvim",

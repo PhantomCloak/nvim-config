@@ -46,7 +46,7 @@ navic.setup(navicCfg)
 lualine.setup(lualineCfg)
 trouble.setup(troubleCfg)
 autopairs.setup()
-
+require'hop'.setup()
 mason.setup()
 
 require"nvim-tree.view".View.winopts.cursorline = true
@@ -62,12 +62,27 @@ let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
 bufferline.setup(bufferLineCfg)
 vim.cmd [[
 colorscheme vscode
-let $FZF_DEFAULT_COMMAND = 'rg -g "*.cs" -g "*.cpp" -g "*.h" --files --hidden'
 
-let g:fzf_preview_window = ['right:50%:hidden']
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+let g:fzf_preview_window = ['right:50%:noborder']
 let $FZF_DEFAULT_OPTS = '--layout=reverse --info=inline --height 40% --preview-window noborder'
-let $FZF_DEFAULT_COMMAND="rg --files --hidden"
 
+let $FZF_DEFAULT_COMMAND="rg --files --hidden"
+let $FZF_DEFAULT_COMMAND = 'rg -g "*.cs" -g "*.cpp" -g "*.h" --files --hidden'
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
@@ -96,6 +111,7 @@ hi BufferLineDevIconHeader guibg=#646464
 hi BufferLineDevIconJson guibg=#646464
 hi Directory guibg=#252526
 let $FZF_DEFAULT_OPTS = '--bind tab:down,shift-tab:up'
+enew
 ]]
 
 require('sterm').setup({

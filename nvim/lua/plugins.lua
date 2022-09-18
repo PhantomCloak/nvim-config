@@ -66,6 +66,10 @@ use('mrjones2014/smart-splits.nvim')
     use 'famiu/bufdelete.nvim'
     use 'Hvassaa/sterm.nvim'
     use {
+        'phaazon/hop.nvim',
+        branch = 'v2'
+    }
+    use {
         'ojroques/nvim-lspfuzzy',
         requires = {
             {'junegunn/fzf'},  -- to enable preview (optional)

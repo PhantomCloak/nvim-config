@@ -362,7 +362,7 @@ bufferLineCfg = {
         mode = "tabs", -- set to "tabs" to only show tabpages instead
         separator_style = "slant",
         close_icon = '',
-        show_tab_indicators = true,
+        show_tab_indicators = false,
         enforce_regular_tabs = true,
         offsets = {
             {

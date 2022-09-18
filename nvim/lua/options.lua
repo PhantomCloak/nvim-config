@@ -42,7 +42,7 @@ vim.o.backup = true
 vim.o.backupdir = os.getenv('HOME') .. '/.cache/nvim'
 
 -- Line options
-vim.o.scrolloff = 5
+vim.o.scrolloff = 12
 
 -- DIAGNOSTICS
 
