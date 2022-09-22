@@ -41,98 +41,82 @@ packer.init({
 
 return packer.startup(function(use)
 
-	use 'wbthomason/packer.nvim' 
+	use 'wbthomason/packer.nvim'
 	use 'lewis6991/impatient.nvim'
 
-    -- COLORS
-    use 'rmehri01/onenord.nvim'
-    use "EdenEast/nightfox.nvim"
-    use 'navarasu/onedark.nvim'
-    use 'Mofiqul/vscode.nvim'
-    use 'nvim-treesitter/playground'
+	-- COLORS
+	use 'rmehri01/onenord.nvim'
+	use "EdenEast/nightfox.nvim"
+	use 'navarasu/onedark.nvim'
+	use 'Mofiqul/vscode.nvim'
+	use 'nvim-treesitter/playground'
 	-- Dependencies
 
-	use 'nvim-lua/plenary.nvim'  
-	use 'kyazdani42/nvim-web-devicons' 
-	use 'jremmen/vim-ripgrep'  
+	use 'nvim-lua/plenary.nvim'
+	use 'kyazdani42/nvim-web-devicons'
+	use 'jremmen/vim-ripgrep'
 	use 'yamatsum/nvim-nonicons' -- The completion plugin
 
-    -- Coding Quality Of Life
-use('mrjones2014/smart-splits.nvim')
-    use 'windwp/nvim-autopairs'
-    use 'saadparwaiz1/cmp_luasnip'
-    use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})
-    use 'rafamadriz/friendly-snippets'
-    use 'famiu/bufdelete.nvim'
-    use 'Hvassaa/sterm.nvim'
-    use {
-        'phaazon/hop.nvim',
-        branch = 'v2'
-    }
-    use {
-        'ojroques/nvim-lspfuzzy',
-        requires = {
-            {'junegunn/fzf'},  -- to enable preview (optional)
-            {'junegunn/fzf.vim'},  -- to enable preview (optional)
-        },
-}
+	-- Coding Quality Of Life
+	use 'mrjones2014/smart-splits.nvim'
+	use 'windwp/nvim-autopairs'
+	use 'saadparwaiz1/cmp_luasnip'
+	use 'rafamadriz/friendly-snippets'
+	use({ "L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*" })
+	use 'famiu/bufdelete.nvim'
+	use {
+		'dgrbrady/nvim-docker',
+		requires = { 'nvim-lua/plenary.nvim', 'MunifTanjim/nui.nvim' },
+		rocks = '4O4/reactivex' -- ReactiveX Lua implementation
+	}
 
-use 'itmecho/neoterm.nvim'
+	-- Navigation +++
 
+	use 'SmiteshP/nvim-navic'
+	use 'nvim-treesitter/nvim-treesitter-textobjects'
+	use 'nvim-treesitter/nvim-treesitter-context'
+	use 'ten3roberts/qf.nvim'
+	use 'ojroques/nvim-lspfuzzy'
+	use 'itmecho/neoterm.nvim'
+	use { 'nvim-telescope/telescope.nvim', tag = '0.1.0' }
+	use { 'akinsho/bufferline.nvim', tag = 'v2.*' }
+	use { 'nvim-treesitter/nvim-treesitter', run = 'TSUpdate' }
 
---use {"akinsho/toggleterm.nvim", tag = '*', config = function()
---  require("toggleterm").setup()
---end}
+	-- Interface
 
--- Navigation +++
+	use 'Shatur/neovim-ayu'
+	use 'stevearc/dressing.nvim'
+	use 'nvim-lualine/lualine.nvim'
+	use 'kevinhwang91/nvim-bqf'
 
-use 'kyazdani42/nvim-tree.lua' 
-use 'SmiteshP/nvim-navic'  
-use { 'akinsho/bufferline.nvim', tag = 'v2.*' }
-use { 'nvim-treesitter/nvim-treesitter', run = 'TSUpdate' }
-use  'nvim-treesitter/nvim-treesitter-textobjects'
-use 'nvim-treesitter/nvim-treesitter-context'
-use 'ten3roberts/qf.nvim'  
-use {
-	'nvim-telescope/telescope.nvim', tag = '0.1.0',
-	-- or                            , branch = '0.1.x',
-	requires = { {'nvim-lua/plenary.nvim'} }
-}
--- Interface
-
-use 'Shatur/neovim-ayu' 
-use 'stevearc/dressing.nvim'  
-use 'nvim-lualine/lualine.nvim' 
-use 'kevinhwang91/nvim-bqf' 
-
--- SCM
+	-- SCM
 
 	use 'kdheepak/lazygit.nvim'
 	use 'tpope/vim-fugitive'
 	use 'tpope/vim-rhubarb'
 	use 'itchyny/vim-gitbranch'
 	use 'airblade/vim-gitgutter'
-	
+
 	-- LSP
 
-	use 'neovim/nvim-lspconfig' 
-	use 'hrsh7th/cmp-nvim-lsp'  
-	use 'hrsh7th/nvim-cmp'  
-	use 'ray-x/lsp_signature.nvim'  
-	
+	use 'neovim/nvim-lspconfig'
+	use 'hrsh7th/cmp-nvim-lsp'
+	use 'hrsh7th/nvim-cmp'
+	use 'ray-x/lsp_signature.nvim'
+
 	-- DAP
 
-	use 'mfussenegger/nvim-dap' 
-	use 'rcarriga/nvim-dap-ui' 
+	use 'mfussenegger/nvim-dap'
+	use 'rcarriga/nvim-dap-ui'
 
 	-- LSP Related
-	
-	use 'folke/lsp-colors.nvim'  
-	use 'onsails/lspkind.nvim'  
-	use 'lukas-reineke/lsp-format.nvim'  
-	use 'williamboman/mason.nvim'  
-	use 'Hoffs/omnisharp-extended-lsp.nvim'  
-	use { 'folke/trouble.nvim', requires = 'kyazdani42/nvim-web-devicons'}
+
+	use 'folke/lsp-colors.nvim'
+	use 'onsails/lspkind.nvim'
+	use 'lukas-reineke/lsp-format.nvim'
+	use 'williamboman/mason.nvim'
+	use 'Hoffs/omnisharp-extended-lsp.nvim'
+	use { 'folke/trouble.nvim', requires = 'kyazdani42/nvim-web-devicons' }
 
 	-- Treesitter
 

@@ -10,6 +10,7 @@ keymap("n", "rr", ":q<CR>", opts)
 
 keymap("n", "<C-n>", ":BufferLineCyclePrev<CR>", opts)
 keymap("n", "<C-m>", ":BufferLineCycleNext<CR>", opts)
+keymap("n", "tt", "NeotermToggle<CR>", opts)
 keymap("n", "<C-c>", ":bdelete<CR>", opts)
 
 keymap("n", "vp", ":BufferPick<CR>", opts)
@@ -44,13 +45,11 @@ keymap("n", "<leader>K", ":lua require(\"dapui\").eval()<CR>", opts)
 function dap_tt()
     vim.cmd('DapTerminate')  
     vim.cmd("lua require('dapui').close()")
-    vim.cmd('TroubleToggle')
     vim.cmd('NvimTreeOpen')  
     vim.cmd('BufferClose!')  
 end
 
 function dap_ll()
-    vim.cmd('TroubleClose')
     vim.cmd('NvimTreeClose')  
     vim.cmd("lua require('dapui').open()")
     vim.cmd('DapContinue')  
@@ -68,6 +67,6 @@ keymap("n", "tc", ":lua require'telescope.builtin'.commands(require('telescope.t
 keymap("n", "<F3>", ":lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({}))<CR>", opts)
 keymap("n", "rt", ":lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({}))<CR>", opts)
 keymap("n", "ff", ":FZF<CR>", opts)
-keymap("n", "tn", ":tabedit "..  vim.fn.getcwd() .." | FZF<CR>", opts)
+keymap("n", "tn", ":tabedit blank | FZF<CR>", opts)
 
 -- LSP Telescope

@@ -150,20 +150,23 @@ cmpConfig = {
 }
 
 -- CONFIG LSP SIGNATURE
+
 lspSignatureCfg = {
     log_path = vim.fn.stdpath("cache") .. "/lsp_signature.log", 
 	bind = true, 
 	doc_lines = 2, 
-	max_height = 7, 
+	max_height = 3, 
 	max_width = 150, 
 	close_timeout = 4000, 
 	hint_enable = false, 
 	hi_parameter = "LspSignatureActiveParameter", 
 	always_trigger = false,
 	extra_trigger_chars = {"(",",",", "}, 
+	select_signature_key = 'P'
 }
 
 -- CONFIG NAVIC
+
 navicCfg = {
 	highlight = true,
 icons = {
@@ -266,10 +269,35 @@ troubleCfg = {
 	auto_preview = true,
 }
 
+-- CONFIG NEOTERM
+
+neoTermCfg = {
+	clear_on_run = true, -- run clear command before user specified commands
+	mode = 'horizontal',   -- vertical/horizontal/fullscreen
+	noinsert = false     -- disable entering insert mode when opening the neoterm window
+}
+
 -- CONFIG DAP
 
 local dap = require('dap')
 
+dap.adapters.unity = {
+    type = 'executable',
+    command = '/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono',
+    args = {'/Users/unalozyurt/.vscode/extensions/unity.unity-debug-3.0.2/bin/UnityDebug.exe'}
+  }
+  
+  dap.configurations.cs = {
+    {
+    type = 'unity',
+    request = 'attach',
+    name = 'Unity Editor',
+    program = function()
+      return 
+    end,
+    }
+  }
+  
 dapCCfg = {
     {
         type = "codelldb",
@@ -298,29 +326,18 @@ dapReplCfg = {
     }
 }
 
+dap.adapters.codelldb = dapCodeLLDBCfg
+dap.configurations.c = dapCCfg
+dap.repl.commands = vim.tbl_extend('force', dap.repl.commands, dapReplCfg)
+
+dap.configurations.cpp = dap.configurations.c
+dap.configurations.rust = dap.configurations.cpp
+
 -- CONFIG DAPUI
 
 dapUiCfg = {
     icons = { expanded = "▾", collapsed = "▸", current_frame = "▸" },
-    mappings = {
-        -- Use a table to apply multiple mappings
-        expand = { "<CR>", "<2-LeftMouse>" },
-        open = "o",
-        remove = "d",
-        edit = "e",
-        repl = "r",
-        toggle = "t",
-    },
-    -- Expand lines larger than the window
-    -- Requires >= 0.7
-    expand_lines = vim.fn.has("nvim-0.7"),
-    -- Layouts define sections of the screen to place windows.
-    -- The position can be "left", "right", "top" or "bottom".
-    -- The size specifies the height/width depending on position. It can be an Int
-    -- or a Float. Integer specifies height/width directly (i.e. 20 lines/columns) while
-    -- Float value specifies percentage (i.e. 0.3 - 30% of available lines/columns)
-    -- Elements are the elements shown in the layout (in order).
-    -- Layouts are opened in order so that earlier layouts take priority in window sizing.
+    expand_lines = true,
     layouts = {
         {
             elements = {
@@ -330,24 +347,16 @@ dapUiCfg = {
                 "stacks",
                 "watches",
             },
-            size = 40, -- 40 columns
+            size = 60, -- 40 columns
             position = "left",
         },
         {
             elements = {
-                "repl",
                 "console",
+                "repl",
             },
             size = 0.25, -- 25% of total lines
             position = "bottom",
-        },
-    },
-    floating = {
-        max_height = nil, -- These can be integers or a float between 0 and 1.
-        max_width = nil, -- Floats will be treated as percentage of your screen.
-        border = "single", -- Border style. Can be "single", "double" or "rounded"
-        mappings = {
-            close = { "q", "<Esc>" },
         },
     },
     windows = { indent = 1 },
@@ -395,4 +404,61 @@ fzf_modifier = ':~:',   -- format FZF entries, see |filename-modifiers|
 
 vim.cmd([[ 
 let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.4, 'yoffset': 1, 'border': 'horizontal' } }
+]])
+
+-- set compability for vscode theme
+vim.cmd([[
+hi BufferLineBackground guifg=#9c9c9c guibg=#646464 
+hi BufferLineSeparator guifg=#252526 guibg=#646464 
+hi BufferLineCloseButton guifg=#9c9c9c guibg=#646464 
+hi BufferLineDevIconLua guibg=#646464
+hi BufferLineDevIconCs guibg=#646464
+hi BufferLineDevIconCpp guibg=#646464
+hi BufferLineDevIconH guibg=#646464
+hi BufferLineDevIconDockerfile guibg=#646464
+hi BufferLineDevIconHeader guibg=#646464
+hi BufferLineDevIconJson guibg=#646464
+hi Directory guibg=#252526
+]])
+
+-- FZF 
+vim.cmd([[
+colorscheme vscode
+
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+let g:fzf_preview_window = ['right:50%:noborder']
+
+let $FZF_DEFAULT_OPTS = '--layout=reverse --info=inline --height 40% --preview-window noborder'
+let $FZF_DEFAULT_COMMAND="rg --files --hidden"
+let $FZF_DEFAULT_COMMAND = 'rg -g "*.cs" -g "*.cpp" -g "*.h" --files --hidden'
+let $FZF_DEFAULT_OPTS = '--bind tab:down,shift-tab:up'
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=never --smart-case '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+
+  function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg -g "*.yml" -g "*.cs" -g "*.cpp" -g "*.h" --column --line-number --no-heading --color=always --smart-case %s | sed "s/ \{1,\}/ /g" || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command, '--with-nth=..4']}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+  endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 ]])
