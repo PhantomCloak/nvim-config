@@ -74,10 +74,21 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
-  LuaSnip = {
+  ["FixCursorHold.nvim"] = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/LuaSnip",
-    url = "https://github.com/L3MON4D3/LuaSnip"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/FixCursorHold.nvim",
+    url = "https://github.com/antoinemadec/FixCursorHold.nvim"
+  },
+  ["arctic.nvim"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/arctic.nvim",
+    url = "https://github.com/rockyzhang24/arctic.nvim"
+  },
+  ["auto-session"] = {
+    config = { "\27LJ\2\n”\1\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0005\3\4\0=\3\5\2B\0\2\1K\0\1\0\31auto_session_suppress_dirs\1\5\0\0\a~/\15~/Projects\16~/Downloads\6/\1\0\1\14log_level\nerror\nsetup\17auto-session\frequire\0" },
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/auto-session",
+    url = "https://github.com/rmagatti/auto-session"
   },
   ["bufdelete.nvim"] = {
     loaded = true,
@@ -94,20 +105,15 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
     url = "https://github.com/hrsh7th/cmp-nvim-lsp"
   },
-  cmp_luasnip = {
+  ["darkplus.nvim"] = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
-    url = "https://github.com/saadparwaiz1/cmp_luasnip"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/darkplus.nvim",
+    url = "https://github.com/martinsione/darkplus.nvim"
   },
   ["dressing.nvim"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/dressing.nvim",
     url = "https://github.com/stevearc/dressing.nvim"
-  },
-  ["friendly-snippets"] = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/friendly-snippets",
-    url = "https://github.com/rafamadriz/friendly-snippets"
   },
   fzf = {
     loaded = true,
@@ -119,10 +125,10 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/fzf.vim",
     url = "https://github.com/junegunn/fzf.vim"
   },
-  ["hop.nvim"] = {
+  ["gitsigns.nvim"] = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/hop.nvim",
-    url = "https://github.com/phaazon/hop.nvim"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/gitsigns.nvim",
+    url = "https://github.com/lewis6991/gitsigns.nvim"
   },
   ["impatient.nvim"] = {
     loaded = true,
@@ -159,25 +165,35 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/lualine.nvim",
     url = "https://github.com/nvim-lualine/lualine.nvim"
   },
-  ["mason.nvim"] = {
+  ["lush.nvim"] = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/mason.nvim",
-    url = "https://github.com/williamboman/mason.nvim"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/lush.nvim",
+    url = "https://github.com/rktjmp/lush.nvim"
   },
-  ["neoterm.nvim"] = {
+  ["markdown-preview.nvim"] = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/neoterm.nvim",
-    url = "https://github.com/itmecho/neoterm.nvim"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/markdown-preview.nvim",
+    url = "https://github.com/iamcco/markdown-preview.nvim"
   },
-  ["neovim-ayu"] = {
+  neotest = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/neovim-ayu",
-    url = "https://github.com/Shatur/neovim-ayu"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/neotest",
+    url = "https://github.com/nvim-neotest/neotest"
   },
-  ["nightfox.nvim"] = {
+  ["neotest-dotnet"] = {
     loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nightfox.nvim",
-    url = "https://github.com/EdenEast/nightfox.nvim"
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/neotest-dotnet",
+    url = "https://github.com/Issafalcon/neotest-dotnet"
+  },
+  ["neotest-plenary"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/neotest-plenary",
+    url = "https://github.com/nvim-neotest/neotest-plenary"
+  },
+  ["nvcode-color-schemes.vim"] = {
+    loaded = true,
+    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvcode-color-schemes.vim",
+    url = "https://github.com/christianchiarulli/nvcode-color-schemes.vim"
   },
   ["nvim-autopairs"] = {
     loaded = true,
@@ -214,11 +230,6 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-lspfuzzy",
     url = "https://github.com/ojroques/nvim-lspfuzzy"
   },
-  ["nvim-navic"] = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-navic",
-    url = "https://github.com/SmiteshP/nvim-navic"
-  },
   ["nvim-nonicons"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-nonicons",
@@ -239,11 +250,6 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-treesitter-context",
     url = "https://github.com/nvim-treesitter/nvim-treesitter-context"
   },
-  ["nvim-treesitter-textobjects"] = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-treesitter-textobjects",
-    url = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
-  },
   ["nvim-web-devicons"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
@@ -254,25 +260,10 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/omnisharp-extended-lsp.nvim",
     url = "https://github.com/Hoffs/omnisharp-extended-lsp.nvim"
   },
-  ["onedark.nvim"] = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/onedark.nvim",
-    url = "https://github.com/navarasu/onedark.nvim"
-  },
-  ["onenord.nvim"] = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/onenord.nvim",
-    url = "https://github.com/rmehri01/onenord.nvim"
-  },
   ["packer.nvim"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
-  },
-  playground = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/playground",
-    url = "https://github.com/nvim-treesitter/playground"
   },
   ["plenary.nvim"] = {
     loaded = true,
@@ -283,21 +274,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/qf.nvim",
     url = "https://github.com/ten3roberts/qf.nvim"
-  },
-  ["smart-splits.nvim"] = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/smart-splits.nvim",
-    url = "https://github.com/mrjones2014/smart-splits.nvim"
-  },
-  ["sterm.nvim"] = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/sterm.nvim",
-    url = "https://github.com/Hvassaa/sterm.nvim"
-  },
-  ["telescope.nvim"] = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/telescope.nvim",
-    url = "https://github.com/nvim-telescope/telescope.nvim"
   },
   ["trouble.nvim"] = {
     loaded = true,
@@ -314,11 +290,6 @@ _G.packer_plugins = {
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vim-gitbranch",
     url = "https://github.com/itchyny/vim-gitbranch"
   },
-  ["vim-gitgutter"] = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vim-gitgutter",
-    url = "https://github.com/airblade/vim-gitgutter"
-  },
   ["vim-rhubarb"] = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vim-rhubarb",
@@ -328,15 +299,14 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vim-ripgrep",
     url = "https://github.com/jremmen/vim-ripgrep"
-  },
-  ["vscode.nvim"] = {
-    loaded = true,
-    path = "/Users/unalozyurt/.local/share/nvim/site/pack/packer/start/vscode.nvim",
-    url = "https://github.com/Mofiqul/vscode.nvim"
   }
 }
 
 time([[Defining packer_plugins]], false)
+-- Config for: auto-session
+time([[Config for auto-session]], true)
+try_loadstring("\27LJ\2\n”\1\0\0\4\0\6\0\t6\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\3\0005\3\4\0=\3\5\2B\0\2\1K\0\1\0\31auto_session_suppress_dirs\1\5\0\0\a~/\15~/Projects\16~/Downloads\6/\1\0\1\14log_level\nerror\nsetup\17auto-session\frequire\0", "config", "auto-session")
+time([[Config for auto-session]], false)
 
 _G._packer.inside_compile = false
 if _G._packer.needs_bufread == true then

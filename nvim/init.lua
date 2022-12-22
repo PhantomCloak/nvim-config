@@ -3,7 +3,6 @@ require 'configs'
 require 'globals'
 require 'keymaps'
 require 'options'
-require 'snippets'
 
 require('impatient')
 
@@ -18,29 +17,46 @@ qf.setup()
 dressing.setup()
 
 require('cmp').setup(cmpConfig)
+require('nvim-tree').setup(treeCfg)
+
 lspconfig.omnisharp.setup(omnisharpLspCfg)
 lspconfig.clangd.setup(clangdLspCfg)
 lspfuzzy.setup(fzfLspFuzzyCfg)
-neoterm.setup(neoTermCfg)
-
+neotest.setup(neoTestCfg)
 dapui.setup(dapUiCfg);
 
-lspcolors.setup()
 lspsignature.setup(lspSignatureCfg)
 lspformat.setup()
-
-navic.setup(navicCfg)
 
 lualine.setup(lualineCfg)
 trouble.setup(troubleCfg)
 autopairs.setup()
-mason.setup()
+
 
 bufferline.setup(bufferLineCfg)
-
 vim.api.nvim_set_hl(0, "TreesitterContext",{default = false, bg = "#363c4c"})
+
 vim.cmd [[
-let g:UltiSnipsJumpForwardTrigger='<Tab>'
-let g:UltiSnipsJumpBackwardTrigger='<S-Tab>'
+hi Type guifg=#1e76ed
+function! IndentWithI()
+    if len(getline('.')) == 0
+        return "\"_cc"
+    else
+        return "i"
+    endif
+endfunction
+nnoremap <expr> i IndentWithI()
 ]]
+
+
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    vim.lsp.diagnostic.on_publish_diagnostics,
+    {
+      virtual_text = false,
+    }
+  )
+
+  --require"nvim-treesitter.highlight".set_custom_captures {
+require('gitsigns').setup()
+
 

@@ -9,16 +9,18 @@ vim.api.nvim_set_hl(0, "NavicIconsNamespace",{default = true, bg = "#1f2430", fg
 
 -- EDITOR OPTIONS
 
-vim.o.signcolumn = 'yes:2'
+vim.o.signcolumn = 'yes:1'
 vim.wo.number = true
+vim.o.cmdheight = 0
+vim.o.pumheight = 15
+vim.o.cinkeys = '0{,0},0),0#,!^F,o,O,e.'
 vim.opt.termguicolors = true
+vim.g.loaded = 1
+vim.g.loaded_netrwPlugin = 1
 
 
 -- FORMATTING OPTIONS
 
-vim.o.tabstop = 4
-vim.o.shiftwidth = 0
-vim.o.softtabstop = 4
 vim.o.expandtab = true
 vim.o.smartindent = true
 

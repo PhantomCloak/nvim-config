@@ -10,7 +10,7 @@ keymap("n", "rr", ":q<CR>", opts)
 
 keymap("n", "<C-n>", ":BufferLineCyclePrev<CR>", opts)
 keymap("n", "<C-m>", ":BufferLineCycleNext<CR>", opts)
-keymap("n", "tt", "NeotermToggle<CR>", opts)
+keymap("n", "tt", ":below split | resize 20 | term<CR>", opts)
 keymap("n", "<C-c>", ":bdelete<CR>", opts)
 
 keymap("n", "vp", ":BufferPick<CR>", opts)
@@ -19,10 +19,13 @@ keymap("n", "vv", ":RG<CR>", opts)
 -- Git
 
 keymap("n", "<leader>lg", ":LazyGit<CR>", opts)
+
 keymap("n", "<leader>gb", ":Git blame<CR>", opts)
 keymap("n", "<leader>ggb", ":GBrowse<CR>", opts)
 keymap("n", "<leader>gv", ":GV?<CR>", opts)
-keymap("n", "<leader>gs", ":Gdiffsplit!<CR>", opts)
+keymap("n", "<leader>gs", ":<cmd>lua show_git_diff()<CR>", opts)
+keymap("n", "<leader>gp", ":Gitsign previw_hunk<CR>", opts)
+keymap("n", "<leader>gr", ":Gitsign undo_stage_hunk<CR>", opts)
 
 -- LSP
 
@@ -40,19 +43,23 @@ keymap("n", "<F5>", ":DapContinue<CR>", opts)
 keymap("n", "<F9>", ":DapToggleBreakpoint<CR>", opts)
 keymap("n", "<F10>", ":DapStepOver<CR>", opts)
 keymap("n", "<F11>", ":DapStepInto<CR>", opts)
-keymap("n", "<leader>K", ":lua require(\"dapui\").eval()<CR>", opts)
+keymap("n", "K", ":lua require(\"dapui\").eval()<CR>", opts)
 
 function dap_tt()
     vim.cmd('DapTerminate')  
     vim.cmd("lua require('dapui').close()")
     vim.cmd('NvimTreeOpen')  
-    vim.cmd('BufferClose!')  
 end
 
 function dap_ll()
     vim.cmd('NvimTreeClose')  
     vim.cmd("lua require('dapui').open()")
     vim.cmd('DapContinue')  
+end
+
+function show_git_diff()
+    vim.cmd("NvimTreeClose")
+    vim.cmd('Gitsign diffthis')  
 end
 -- FZF
 
@@ -69,4 +76,4 @@ keymap("n", "rt", ":lua require'telescope.builtin'.find_files(require('telescope
 keymap("n", "ff", ":FZF<CR>", opts)
 keymap("n", "tn", ":tabedit blank | FZF<CR>", opts)
 
--- LSP Telescope
+-- LSP Telescopj
