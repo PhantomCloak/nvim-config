@@ -325,7 +325,6 @@ dapUiCfg = {
 
 bufferLineCfg = {
     options = {
-        mode = "tabs", -- set to "tabs" to only show tabpages instead
         separator_style = "slant",
         close_icon = '',
         show_tab_indicators = false,
@@ -336,6 +335,7 @@ bufferLineCfg = {
                 text = "File Explorer",
                 text_align = "center",
                 highlight = "Directory",
+                padding = 1
             }
         },
     },
