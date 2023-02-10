@@ -91,13 +91,13 @@ return packer.startup(function(use)
   use 'tpope/vim-fugitive'
 
   --use 'nvim-treesitter/nvim-treesitter-textobjects'
-  use 'nvim-treesitter/nvim-treesitter-context'
   use 'ten3roberts/qf.nvim'
   use 'ojroques/nvim-lspfuzzy'
   --use { 'nvim-telescope/telescope.nvim', tag = '0.1.0' }
   use { 'akinsho/bufferline.nvim', tag = 'v2.*' }
   --use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' , commit = '14edfee545624f238debae3d65966647be808345'}
+  use {'nvim-treesitter/nvim-treesitter-context', requires = 'nvim-treesitter/nvim-treesitter'}
   use 'kyazdani42/nvim-tree.lua'
 
   -- Interface
@@ -105,7 +105,6 @@ return packer.startup(function(use)
   use 'stevearc/dressing.nvim'
   use 'nvim-lualine/lualine.nvim'
   use 'kevinhwang91/nvim-bqf'
-
   -- SCM
 
   use 'kdheepak/lazygit.nvim'
@@ -116,6 +115,7 @@ return packer.startup(function(use)
   -- LSP
 
   use 'neovim/nvim-lspconfig'
+  use 'tikhomirov/vim-glsl'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/nvim-cmp'
   use 'ray-x/lsp_signature.nvim'
@@ -134,6 +134,7 @@ return packer.startup(function(use)
   use { 'folke/trouble.nvim', requires = 'kyazdani42/nvim-web-devicons' }
 
   -- Treesitter
+  
 
   if PACKER_BOOTSTRAP then
     require("packer").sync()
