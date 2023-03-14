@@ -3,7 +3,7 @@ My C#/C++ NVIM Workflow
 
 It works on MacOS probably on Linux too for Windows there is few path related configs to port
 
-### How To Setup Unity
+### How To Setup Unity and .Net Core LSP
 
 1) Download omnisharp-roslyn from https://github.com/OmniSharp/omnisharp-roslyn/releases
 2) Replace OmniSharp path from config.lua inside OmnisharpLspCfg class to freshly downloaded package
@@ -18,14 +18,14 @@ It works on MacOS probably on Linux too for Windows there is few path related co
 
 
 ### Dependencies 
-1) MonoMDK
-2) .NET Core 6 - for OmniSharp
-3) OmniSharp - mentioned in first step of setting up unity
-4) Packer for Neovim
-5) Opt: Ripgrep - for file/text search
-6) Opt: Bat - for colorfull output in Ripgrep
-7) Opt: Fzf - for formatting Ripgrep since it's usually installed automatically I write it down in case of missing install
-8) Opt: netcoredbg - for .NET Core debugging
+1) [MonoMDK](https://formulae.brew.sh/cask/mono-mdk)
+2) [.NET Core 6](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) - for OmniSharp
+3) [OmniSharp](https://github.com/OmniSharp/omnisharp-roslyn) - mentioned in first step of setting up unity
+4) [Packer](https://github.com/wbthomason/packer.nvim)
+5) Opt: [Ripgrep](https://github.com/BurntSushi/ripgrep) - for file/text search
+6) Opt: [Bat](https://github.com/sharkdp/bat) - for colorfull output in Ripgrep
+7) Opt: [Fzf](https://github.com/junegunn/fzf) -  for formatting Ripgrep since it's usually installed automatically I write it down in case of missing install
+8) Opt: [netcoredbg](https://github.com/Samsung/netcoredbg] - for .NET Core debugging
 
 ### Things to consider
 
