@@ -25,7 +25,7 @@ It works on MacOS probably on Linux too for Windows there is few path related co
 5) Opt: [Ripgrep](https://github.com/BurntSushi/ripgrep) - for file/text search
 6) Opt: [Bat](https://github.com/sharkdp/bat) - for colorfull output in Ripgrep
 7) Opt: [Fzf](https://github.com/junegunn/fzf) -  for formatting Ripgrep since it's usually installed automatically I write it down in case of missing install
-8) Opt: [netcoredbg](https://github.com/Samsung/netcoredbg] - for .NET Core debugging
+8) Opt: [netcoredbg](https://github.com/Samsung/netcoredbg) - for .NET Core debugging
 
 ### Things to consider
 
