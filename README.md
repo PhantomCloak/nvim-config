@@ -21,10 +21,11 @@ It works on MacOS probably on Linux too for Windows there is few path related co
 1) MonoMDK
 2) .NET Core 6 - for OmniSharp
 3) OmniSharp - mentioned in first step of setting up unity
-4) Opt: Ripgrep - for file/text search
-5) Opt: Bat - for colorfull output in Ripgrep
-6) Opt: Fzf - for formatting Ripgrep since it's usually installed automatically I write it down in case of missing install
-6) Opt: netcoredbg - for .NET Core debugging
+4) Packer for Neovim
+5) Opt: Ripgrep - for file/text search
+6) Opt: Bat - for colorfull output in Ripgrep
+7) Opt: Fzf - for formatting Ripgrep since it's usually installed automatically I write it down in case of missing install
+8) Opt: netcoredbg - for .NET Core debugging
 
 ### Things to consider
 
