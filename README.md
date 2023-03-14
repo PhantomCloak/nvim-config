@@ -1,7 +1,7 @@
 # nvim-config
 My C#/C++ NVIM Workflow
 
-It works on MacOS probably on Linux too for Windows there is few path related configs to port
+It works on MacOS probably on Linux too for Windows there are few path related configs to port
 
 ### How To Setup Unity and .Net Core LSP
 
