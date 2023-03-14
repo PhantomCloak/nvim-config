@@ -15,3 +15,17 @@ It works on MacOS probably on Linux too for Windows there is few path related co
 1) Download VsCode then install Debugger For Unity extension
 2) Check if extension is installed correctly by looking `~/.vscode/extensions/unity.unity-debug-x.x.x`
 3) Done!
+
+
+### Dependencies 
+1) MonoMDK
+2) .NET Core 6 - for OmniSharp
+3) OmniSharp - mentioned in first step of setting up unity
+4) Opt: Ripgrep - for file/text search
+5) Opt: Bat - for colorfull output in Ripgrep
+6) Opt: Fzf - for formatting Ripgrep since it's usually installed automatically I write it down in case of missing install
+6) Opt: netcoredbg - for .NET Core debugging
+
+Things to consider
+1 - Since dotnet and mono have to use different debuggers you only have debugger on unity side I didn't address the issue but it's pretty trivial to some scripting
+2 - Code completion should work with .NET Core and Unity seemlessly
