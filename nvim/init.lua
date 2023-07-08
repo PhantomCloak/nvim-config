@@ -21,8 +21,8 @@ require('nvim-tree').setup(treeCfg)
 
 lspconfig.omnisharp.setup(omnisharpLspCfg)
 lspconfig.clangd.setup(clangdLspCfg)
+
 lspfuzzy.setup(fzfLspFuzzyCfg)
-neotest.setup(neoTestCfg)
 dapui.setup(dapUiCfg);
 
 lspsignature.setup(lspSignatureCfg)
@@ -56,7 +56,6 @@ nnoremap <expr> i IndentWithI()
     }
   )
 
-  --require"nvim-treesitter.highlight".set_custom_captures {
 require('gitsigns').setup()
 
 

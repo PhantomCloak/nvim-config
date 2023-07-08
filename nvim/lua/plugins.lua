@@ -43,11 +43,12 @@ return packer.startup(function(use)
 
   use 'wbthomason/packer.nvim'
   use 'lewis6991/impatient.nvim'
-
   -- COLORS
   use 'christianchiarulli/nvcode-color-schemes.vim'
+  use 'tzachar/local-highlight.nvim'
   use {"rockyzhang24/arctic.nvim", requires = {"rktjmp/lush.nvim"}, commit = '061ac5c34dbe3ee0efd1dae81cb85bd8469ad772'}
   use 'martinsione/darkplus.nvim'
+  use 'Mofiqul/vscode.nvim'
 
   -- Dependencies
 
@@ -81,6 +82,20 @@ return packer.startup(function(use)
     }
   }
 
+  use {
+          'chipsenkbeil/distant.nvim',
+          branch = 'v0.2',
+          config = function()
+                  require('distant').setup {
+                          -- Applies Chip's personal settings to every machine you connect to
+                          --
+                          -- 1. Ensures that distant servers terminate with no connections
+                          -- 2. Provides navigation bindings for remote directories
+                          -- 3. Provides keybinding to jump into a remote file's parent directory
+                          ['*'] = require('distant.settings').chip_default()
+                  }
+          end
+  }
 
   use({
     "iamcco/markdown-preview.nvim",
@@ -89,14 +104,15 @@ return packer.startup(function(use)
 
   -- Navigation +++
   use 'tpope/vim-fugitive'
+  use 'Decodetalkers/csharpls-extended-lsp.nvim'
 
   --use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'ten3roberts/qf.nvim'
   use 'ojroques/nvim-lspfuzzy'
-  --use { 'nvim-telescope/telescope.nvim', tag = '0.1.0' }
   use { 'akinsho/bufferline.nvim', tag = 'v2.*' }
-  --use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
-  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' , commit = '14edfee545624f238debae3d65966647be808345'}
+  --use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' , commit = '14edfee545624f238debae3d65966647be808345'}
+  --use {'nvim-treesitter/nvim-treesitter-context', requires = 'nvim-treesitter/nvim-treesitter'}
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use {'nvim-treesitter/nvim-treesitter-context', requires = 'nvim-treesitter/nvim-treesitter'}
   use 'kyazdani42/nvim-tree.lua'
 
@@ -105,16 +121,17 @@ return packer.startup(function(use)
   use 'stevearc/dressing.nvim'
   use 'nvim-lualine/lualine.nvim'
   use 'kevinhwang91/nvim-bqf'
+  
   -- SCM
 
   use 'kdheepak/lazygit.nvim'
-  --use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
+  use 'tpope/vim-fugitive'
   use 'itchyny/vim-gitbranch'
 
   -- LSP
 
-  use 'neovim/nvim-lspconfig'
+  use {'neovim/nvim-lspconfig'}
   use 'tikhomirov/vim-glsl'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/nvim-cmp'

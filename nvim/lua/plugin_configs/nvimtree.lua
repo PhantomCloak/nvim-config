@@ -1,0 +1,1 @@
+require"nvim-tree.view".View.winopts.cursorline = true

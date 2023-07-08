@@ -26,17 +26,15 @@ treeSitterCfg = {
 -- TREE CONFIG
 local fckLst = {
     { key = "R", action = "none" },
-    { key = "f", action = "none" },
+    --{ key = "f", action = "none" },
     { key = "a", action = "create" },
-    { key = "F", action = "none" },
+    --{ key = "F", action = "none" },
     { key = "FF", action = "none" },
     { key = "ff", action = "none" },
     { key = {"<CR>"}, action = "edit" },
 }
 treeCfg = {
     auto_reload_on_write = true,
-    open_on_setup = false,
-    open_on_setup_file = false,
     open_on_tab = true,
     prefer_startup_root = true,
     view = {
@@ -91,6 +89,10 @@ local cmpnvimlsp = require('cmp_nvim_lsp')
 vim.keymap.set('n', 'KF', vim.lsp.buf.hover, bufopts) -- it heps for var types
 
 omnisharpLspCfg = {
+    use_mono = true,
+     root_dir = function(fname)    
+        return vim.loop.cwd()
+    end,
     on_attach = function(client, bufnr)
 
         vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
@@ -98,6 +100,7 @@ omnisharpLspCfg = {
 
         lspformat.on_attach(client)
         keymap("n", "gd", ":lua require('omnisharp_extended').lsp_definitions()<CR>", opts)
+        keymap("n", "gj", ":lua require('csharpls_extended').lsp_definitions()<CR>", opts)
 
         vim.opt.tabstop = 4
         vim.opt.shiftwidth = 4
@@ -105,11 +108,16 @@ omnisharpLspCfg = {
 
     end,
     handlers = {
-        --["textDocument/definition"] = require("omnisharp_extended").handler,
+        --["textDocument/definition"] = require('csharpls_extended').handler,
+        ["textDocument/definition"] = require("omnisharp_extended").handler,
     },
-    cmd = { "/Users/unalozyurt/Downloads/omnisharp-osx-arm64-net6.0/OmniSharp", "--languageserver", "--hostPID",
-        tostring(pid) },
+    cmd = { os.getenv('HOME') .. "/Developer/tools/omnisharp-osx-arm64-net6.0/OmniSharp", "--languageserver", "--hostPID", tostring(pid) },
+    omnisharp = {
+        useModernNet = false,
+        monoPath = "/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono"
+    }
 }
+--require'lspconfig'.csharp_ls.setup(config)
 
 clangdLspCfg = {
     on_attach = function(client, bufnr)
@@ -155,7 +163,7 @@ lspSignatureCfg = {
     log_path = vim.fn.stdpath("cache") .. "/lsp_signature.log",
     bind = true,
     doc_lines = 2,
-    floating_window_above_cur_line = false,
+    floating_window_above_cur_line = trutrue,
     max_height = 3,
     max_width = 150,
     close_timeout = 1500,
@@ -168,25 +176,6 @@ lspSignatureCfg = {
     extra_trigger_chars = { "(", ",", ", " },
 }
 
--- CONFIG TELESSCOPE
-
-telescopeCfg = {
-    pickers = {
-        lsp_references = {
-            theme = "dropdown",
-        },
-        lsp_definitions = {
-            theme = "dropdown",
-        }
-    },
-    defaults = {
-        file_ignore_patterns = { "^./.git/", "^node_modules/", "^vendor/", "%.meta",
-            "%.asset", "%.unity", "%.ttf", "%.png", "%.jpg", "%.prefab", "%.ogg",
-            "%.anim", "%.fbx", "%.obj", "%.tga", "%.shader", "%.swcode", "%.mat",
-            "%.vfx", "%.FBX", "%.asmdef", "%.controller", "%.dll", "%.TGA",
-            "%.file" },
-    }
-}
 
 -- CONFIG LUALINE
 
@@ -219,14 +208,6 @@ troubleCfg = {
     auto_preview = true,
 }
 
--- CONFIG NEOTEST
-
-neoTestCfg = {
-    adapters = {
-        require("neotest-dotnet"),
-        require("neotest-plenary"),
-    },
-}
 -- CONFIG DAP
 
 local dap = require('dap')
@@ -234,7 +215,7 @@ local dap = require('dap')
 dap.adapters.unity = {
     type = 'executable',
     command = '/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono',
-    args = { '/Users/unalozyurt/.vscode/extensions/unity.unity-debug-3.0.2/bin/UnityDebug.exe' }
+    args = { os.getenv('HOME') .. '/.vscode/extensions/unity.unity-debug-3.0.2/bin/UnityDebug.exe' }
 }
 
 dap.configurations.cs = {
@@ -367,7 +348,7 @@ let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.4, 'yoffset': 1, 'borde
 require"nvim-tree.view".View.winopts.cursorline = true
 -- FZF
 vim.cmd([[
-colorscheme darkplus
+colorscheme vscode
 
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -397,7 +378,7 @@ command! -bang -nargs=* Rg
   \   fzf#vim#with_preview(), <bang>0)
 
   function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg -g "*.yml" -g "*.cs" -g "*.cpp" -g "*.h" -g "*.js" --column --line-number --no-heading --color=always --smart-case %s | sed "s/ \{1,\}/ /g" || true'
+  let command_fmt = 'rg -g "*.yml" -g "*.hh" -g "*.cc" -g "*.cs" -g "*.cpp" -g "*.h" -g "*.js" -g "*.csproj" -g "*.sln" -g "*.proto" --column --line-number --no-heading --color=always --smart-case %s | sed "s/ \{1,\}/ /g" || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command, '--with-nth=..4']}
