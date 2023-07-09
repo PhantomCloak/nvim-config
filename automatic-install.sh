@@ -84,6 +84,13 @@ install_on_debian() {
         echo "Fzf already installed"
     fi
 
+    echo "Installing Bat..."
+    if ! command -v batcat --version > /dev/null 2>&1; then
+        sudo apt-get install bat -y
+    else
+        echo "Bat already installed"
+    fi
+
     echo "Installing Ripgrep..."
     if ! command -v rg > /dev/null 2>&1; then
         sudo apt-get install ripgrep -y
