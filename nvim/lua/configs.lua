@@ -122,7 +122,7 @@ omnisharpLspCfg = {
         --["textDocument/definition"] = require('csharpls_extended').handler,
         ["textDocument/definition"] = require("omnisharp_extended").handler,
     },
-    cmd = { os.getenv('HOME') .. "/Developer/tools/omnisharp-osx-arm64-net6.0/OmniSharp", "--languageserver", "--hostPID", tostring(pid) },
+    cmd = { os.getenv('HOME') .. "/.OmniSharp/OmniSharp", "--languageserver", "--hostPID", tostring(pid) },
     omnisharp = {
         useModernNet = false,
         monoPath = getMonoPath()
