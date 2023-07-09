@@ -225,8 +225,8 @@ local dap = require('dap')
 
 dap.adapters.unity = {
     type = 'executable',
-    command = '/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono',
-    args = { os.getenv('HOME') .. '/.vscode/extensions/unity.unity-debug-3.0.2/bin/UnityDebug.exe' }
+    command = getMonoPath(),
+    args = { os.getenv('HOME') .. '/.UnityDbg/bin/UnityDebug.exe' }
 }
 
 dap.configurations.cs = {
