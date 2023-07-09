@@ -380,7 +380,7 @@ let g:fzf_preview_window = ['right:50%:noborder']
 
 let $FZF_DEFAULT_OPTS = '--layout=reverse --info=inline --height 40% --preview-window noborder'
 let $FZF_DEFAULT_COMMAND="rg --files --hidden"
-let $FZF_DEFAULT_COMMAND = 'rg -F -g "*.cs" -g "*.c" -g "*.cpp" -g "*.h" --files --hidden'
+let $FZF_DEFAULT_COMMAND = 'rg -F -g "*.cs" -g "*.c" -g "*.cpp" -g "*.h" -g "*.hh" -g "*.cc" -g "*.hpp" --files --hidden'
 let $FZF_DEFAULT_OPTS = '--bind tab:down,shift-tab:up'
 
 command! -bang -nargs=* Rg
