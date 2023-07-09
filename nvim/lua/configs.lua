@@ -88,6 +88,17 @@ local cmp = require('cmp')
 local cmpnvimlsp = require('cmp_nvim_lsp')
 vim.keymap.set('n', 'KF', vim.lsp.buf.hover, bufopts) -- it heps for var types
 
+function getMonoPath()
+    local f = assert(io.popen('which mono', 'r'))
+    local s = assert(f:read('*a'))
+    f:close()
+    s = s:gsub('^%s*(.-)%s*$', '%1') -- trim
+    if s == '' then
+        return nil -- or return a default value
+    end
+    return s
+end
+
 omnisharpLspCfg = {
     use_mono = true,
      root_dir = function(fname)    
@@ -114,7 +125,7 @@ omnisharpLspCfg = {
     cmd = { os.getenv('HOME') .. "/Developer/tools/omnisharp-osx-arm64-net6.0/OmniSharp", "--languageserver", "--hostPID", tostring(pid) },
     omnisharp = {
         useModernNet = false,
-        monoPath = "/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono"
+        monoPath = getMonoPath()
     }
 }
 --require'lspconfig'.csharp_ls.setup(config)
