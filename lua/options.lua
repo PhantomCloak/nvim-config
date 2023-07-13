@@ -2,6 +2,8 @@
 
 --vim.o.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 
+vim.opt.termguicolors = true -- 256 color support
+
 vim.api.nvim_set_hl(0, "NavicText",{default = true, bg = "#1f2430", fg = "#73d0ff"})
 vim.api.nvim_set_hl(0, "NavicIconsMethod",{default = true, bg = "#1f2430", fg = "#c078b8"})
 vim.api.nvim_set_hl(0, "NavicIconsClass",{default = true, bg = "#1f2430", fg = "#c078b8"})

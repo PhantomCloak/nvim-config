@@ -1,33 +1,3 @@
--- Setup Plugins & Keymaps & Vim Options
-require 'plugins'
-require 'keymaps'
-require 'options'
-
--- Setup UI
-require 'tabs'
-require 'status_bar'
-require 'file_tree'
-
-
--- Setup LSP
-require 'lsp'
-require 'syntax_highlighter'
-require 'debugger'
-require 'diagnostics'
-
--- Setup Tools
-require 'prompt'
-require 'git'
-
-bqf = require("bqf")
-qf = require("qf")
-dressing = require("dressing")
-lspfuzzy = require('lspfuzzy')
-
-bqf.setup()
-qf.setup()
-dressing.setup()
-
 -- Auto indention with insert mode
 vim.cmd [[
 hi Type guifg=#1e76ed
@@ -51,3 +21,4 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
    {
      virtual_text = false,
    })
+

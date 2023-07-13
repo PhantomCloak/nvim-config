@@ -26,5 +26,5 @@ bufferLineCfg = {
     },
 }
 
-local bufferline = require("bufferline")
+bufferline = require("bufferline")
 bufferline.setup(bufferLineCfg)

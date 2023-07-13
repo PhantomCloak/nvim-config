@@ -13,6 +13,7 @@ fzfLspFuzzyCfg = {
     fzf_modifier = ':~:', -- format FZF entries, see |filename-modifiers|
 }
 
+local lspfuzzy = require('lspfuzzy')
 lspfuzzy.setup(fzfLspFuzzyCfg)
 
 vim.cmd([[

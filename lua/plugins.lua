@@ -42,13 +42,10 @@ packer.init({
 return packer.startup(function(use)
 
   use 'wbthomason/packer.nvim'
-  use 'lewis6991/impatient.nvim'
   -- COLORS
-  use 'christianchiarulli/nvcode-color-schemes.vim'
-  use 'tzachar/local-highlight.nvim'
   use {"rockyzhang24/arctic.nvim", requires = {"rktjmp/lush.nvim"}, commit = '061ac5c34dbe3ee0efd1dae81cb85bd8469ad772'}
-  use 'martinsione/darkplus.nvim'
   use 'Mofiqul/vscode.nvim'
+
 
   -- Dependencies
 
@@ -73,34 +70,6 @@ return packer.startup(function(use)
       }
     end
   }
-  use {
-    "nvim-neotest/neotest",
-    requires = {
-      "Issafalcon/neotest-dotnet",
-      "nvim-neotest/neotest-plenary",
-      "antoinemadec/FixCursorHold.nvim"
-    }
-  }
-
-  use {
-          'chipsenkbeil/distant.nvim',
-          branch = 'v0.2',
-          config = function()
-                  require('distant').setup {
-                          -- Applies Chip's personal settings to every machine you connect to
-                          --
-                          -- 1. Ensures that distant servers terminate with no connections
-                          -- 2. Provides navigation bindings for remote directories
-                          -- 3. Provides keybinding to jump into a remote file's parent directory
-                          ['*'] = require('distant.settings').chip_default()
-                  }
-          end
-  }
-
-  use({
-    "iamcco/markdown-preview.nvim",
-    run = function() vim.fn["mkdp#util#install"]() end,
-  })
 
   -- Navigation +++
   use 'tpope/vim-fugitive'
@@ -110,8 +79,6 @@ return packer.startup(function(use)
   use 'ten3roberts/qf.nvim'
   use 'ojroques/nvim-lspfuzzy'
   use { 'akinsho/bufferline.nvim', tag = 'v2.*' }
-  --use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' , commit = '14edfee545624f238debae3d65966647be808345'}
-  --use {'nvim-treesitter/nvim-treesitter-context', requires = 'nvim-treesitter/nvim-treesitter'}
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use {'nvim-treesitter/nvim-treesitter-context', requires = 'nvim-treesitter/nvim-treesitter'}
   use 'kyazdani42/nvim-tree.lua'
@@ -132,7 +99,6 @@ return packer.startup(function(use)
   -- LSP
 
   use {'neovim/nvim-lspconfig'}
-  use 'tikhomirov/vim-glsl'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/nvim-cmp'
   use 'ray-x/lsp_signature.nvim'
@@ -144,14 +110,10 @@ return packer.startup(function(use)
 
   -- LSP Related
 
-  use 'folke/lsp-colors.nvim'
   use 'onsails/lspkind.nvim'
   use 'lukas-reineke/lsp-format.nvim'
   use 'Hoffs/omnisharp-extended-lsp.nvim'
   use { 'folke/trouble.nvim', requires = 'kyazdani42/nvim-web-devicons' }
-
-  -- Treesitter
-  
 
   if PACKER_BOOTSTRAP then
     require("packer").sync()

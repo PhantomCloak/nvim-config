@@ -1,3 +1,6 @@
+opts = { noremap = true, silent = true }
+api = vim.api
+keymap = vim.api.nvim_set_keymap
 
 -- Control
 
@@ -29,6 +32,7 @@ keymap("n", "<leader>gr", ":Gitsign undo_stage_hunk<CR>", opts)
 
 -- LSP
 
+--keymap('n', 'KF', vim.lsp.buf.hover, bufopts)
 keymap("n", "gr", ":lua vim.lsp.buf.references()<CR>", opts)
 keymap("n", "rn", ":lua vim.lsp.buf.rename()<CR>", opts)
 keymap("n", "m", ":ClangdSwitchSourceHeader<CR>", opts)
