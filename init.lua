@@ -1,7 +1,6 @@
 -- Setup Plugins & Keymaps & Vim Options
 require 'plugins'
 require 'keymaps'
-require 'options'
 
 -- Setup UI
 require 'tabs'
