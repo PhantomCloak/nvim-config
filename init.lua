@@ -1,33 +1,3 @@
--- Setup Plugins & Keymaps & Vim Options
-require 'plugins'
-require 'keymaps'
-
--- Setup UI
-require 'tabs'
-require 'status_bar'
-require 'file_tree'
-
-
--- Setup LSP
-require 'lsp'
-require 'syntax_highlighter'
-require 'debugger'
-require 'diagnostics'
-
--- Setup Tools
-require 'prompt'
-require 'git'
-
--- VISUAL
-bqf = require("bqf")
-qf = require("qf")
-dressing = require("dressing")
-lspfuzzy = require('lspfuzzy')
-
-bqf.setup()
-qf.setup()
-dressing.setup()
-
 -- OPTIONS
 vim.opt.termguicolors = true
 
@@ -74,6 +44,38 @@ vim.o.scrolloff = 12
 
 vim.api.nvim_set_hl(0, "TreesitterContext",{default = false, bg = "#363c4c"})
 
+-- Setup Plugins & Keymaps & Vim Options
+require 'plugins'
+require 'keymaps'
+
+-- Setup UI
+require 'tabs'
+require 'status_bar'
+require 'file_tree'
+
+
+-- Setup LSP
+require 'lsp'
+require 'syntax_highlighter'
+require 'debugger'
+require 'diagnostics'
+
+-- Setup Tools
+require 'prompt'
+require 'git'
+
+-- VISUAL
+bqf = require("bqf")
+qf = require("qf")
+dressing = require("dressing")
+lspfuzzy = require('lspfuzzy')
+
+bqf.setup()
+qf.setup()
+dressing.setup()
+
+
+
 -- Auto indention with insert mode
 vim.cmd [[
 hi Type guifg=#1e76ed
@@ -95,5 +97,25 @@ vim.api.nvim_set_hl(0, "TreesitterContext",{default = false, bg = "#363c4c"})
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
    vim.lsp.diagnostic.on_publish_diagnostics,
    {
-     virtual_text = false,
+     --virtual_text = false,
    })
+
+
+   
+vim.cmd([[
+hi BufferLineBackground guifg=#9c9c9c guibg=#646464 
+hi BufferLineSeparator guifg=#252526 guibg=#646464 
+hi BufferLineCloseButton guifg=#9c9c9c guibg=#646464 
+hi BufferLineDevIconLua guibg=#646464
+hi BufferLineDevIconCs guibg=#646464
+hi BufferLineDevIconCpp guibg=#646464
+hi BufferLineDevIconDefault guibg=#646464
+hi BufferLineDevIconJson guibg=#646464
+hi BufferLineDevIconH guibg=#646464
+hi BufferLineDevIconDockerfile guibg=#646464
+hi BufferLineDevIconHeader guibg=#646464
+hi BufferLineDevIconJson guibg=#646464
+hi BufferLineFill guibg=#252526
+hi debugPC guibg=#424218
+set signcolumn=number
+]])

@@ -3,18 +3,16 @@
 -- ===========================
 
 require"nvim-tree.view".View.winopts.cursorline = true
+
 local tree_key_maps = {
     { key = "R", action = "none" },
-    --{ key = "f", action = "none" },
     { key = "a", action = "create" },
-    --{ key = "F", action = "none" },
     { key = "FF", action = "none" },
     { key = "ff", action = "none" },
     { key = {"<CR>"}, action = "edit" },
 }
 
 treeCfg = {
-    auto_reload_on_write = true,
     open_on_tab = true,
     prefer_startup_root = true,
     view = {
@@ -33,9 +31,6 @@ treeCfg = {
         enable = true
     },
     renderer = {
-        highlight_git = false,
-        highlight_opened_files = "none",
-        indent_width = 2,
         icons = {
             show = {
                 folder_arrow = true,
@@ -55,10 +50,7 @@ treeCfg = {
         custom = { "*.meta" },
     },
     git = {
-        enable = false,
-        ignore = true,
-        show_on_dirs = true,
-        timeout = 400,
+        enable = false
     },
 }
 

@@ -60,6 +60,7 @@ return packer.startup(function(use)
   use 'windwp/nvim-autopairs'
   use 'famiu/bufdelete.nvim'
   use 'lewis6991/gitsigns.nvim'
+  use 'nvimdev/lspsaga.nvim'
 
   use {
     'rmagatti/auto-session',
@@ -71,6 +72,12 @@ return packer.startup(function(use)
     end
   }
 
+  use({
+    "iamcco/markdown-preview.nvim",
+    run = function() vim.fn["mkdp#util#install"]() end,
+})
+
+
   -- Navigation +++
   use 'tpope/vim-fugitive'
   use 'Decodetalkers/csharpls-extended-lsp.nvim'
@@ -80,7 +87,7 @@ return packer.startup(function(use)
   use 'ojroques/nvim-lspfuzzy'
   use { 'akinsho/bufferline.nvim', tag = 'v2.*' }
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
-  use {'nvim-treesitter/nvim-treesitter-context', requires = 'nvim-treesitter/nvim-treesitter'}
+  --use {'nvim-treesitter/nvim-treesitter-context', requires = 'nvim-treesitter/nvim-treesitter'}
   use 'kyazdani42/nvim-tree.lua'
 
   -- Interface

@@ -5,6 +5,23 @@
 local dap = require('dap')
 local dapui = require('dapui')
 
+dap.adapters.unity = {
+    type = 'executable',
+    command = getMonoPath(), -- should get from lsp.lua
+    args = { os.getenv('HOME') .. '/.UnityDbg/bin/UnityDebug.exe' }
+}
+
+dap.configurations.cs = {
+    {
+        type = 'unity',
+        request = 'attach',
+        name = 'Unity Editor',
+        program = function()
+            return
+        end,
+    }
+}
+
 dapCodeLLDBCfg = {
     type = 'server',
     host = '127.0.0.1',

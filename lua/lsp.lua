@@ -2,6 +2,10 @@
 -- Autocomplete for C# & C++
 -- ===========================
 
+opts = { noremap = true, silent = true }
+api = vim.api
+keymap = vim.api.nvim_set_keymap
+
 -- Defs
 
 local lspconfig = require("lspconfig")
@@ -29,11 +33,10 @@ omnisharpLspCfg = {
         return vim.loop.cwd()
     end,
     on_attach = function(client, bufnr)
-
         vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts) -- it heps for var types
-
         lspformat.on_attach(client)
+
+        --keymap('n', 'K', vim.lsp.buf.hover, bufopts)
         keymap("n", "gd", ":lua require('omnisharp_extended').lsp_definitions()<CR>", opts)
         keymap("n", "gj", ":lua require('csharpls_extended').lsp_definitions()<CR>", opts)
 
@@ -56,7 +59,7 @@ omnisharpLspCfg = {
 
 clangdLspCfg = {
     on_attach = function(client, bufnr)
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+        keymap('n', 'gd', vim.lsp.buf.definition, bufopts)
         lspsignature.on_attach()
         
         vim.opt.tabstop = 2
@@ -72,13 +75,13 @@ clangdLspCfg = {
 cmpConfig = {
     appearance = {
         menu = {
-            direction = 'below' -- auto or above or below
+            direction = 'below'
         }
     },
     formatting = {
         format = lspkind.cmp_format({
-            mode = 'symbol_text', -- show only symbol annotations
-            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            mode = 'symbol_text', 
+            maxwidth = 50,
         })
     },
     mapping = cmp.mapping.preset.insert({
@@ -111,8 +114,6 @@ lspSignatureCfg = {
     extra_trigger_chars = { "(", ",", ", " },
 }
 
-
-
 cmp.setup(cmpConfig)
 lspconfig.omnisharp.setup(omnisharpLspCfg)
 lspconfig.clangd.setup(clangdLspCfg)
@@ -120,3 +121,9 @@ lspsignature.setup(lspSignatureCfg)
 
 lspformat.setup()
 autopairs.setup()
+
+require('lspsaga').setup({
+        lightbulb = {
+                virtual_text = false,
+        }
+})
