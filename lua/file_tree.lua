@@ -20,12 +20,6 @@ treeCfg = {
         side = "left",
         width = 35,
         preserve_window_proportions = true,
-        hide_root_folder = true,
-        signcolumn = "no",
-        mappings = {
-         custom_only = true,
-          list = tree_key_maps,
-        },
     },
     update_focused_file = {
         enable = true

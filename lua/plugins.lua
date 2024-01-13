@@ -61,6 +61,7 @@ return packer.startup(function(use)
   use 'famiu/bufdelete.nvim'
   use 'lewis6991/gitsigns.nvim'
   use 'nvimdev/lspsaga.nvim'
+  use 'RaafatTurki/hex.nvim'
 
   use {
     'rmagatti/auto-session',
@@ -72,10 +73,10 @@ return packer.startup(function(use)
     end
   }
 
-  use({
-    "iamcco/markdown-preview.nvim",
-    run = function() vim.fn["mkdp#util#install"]() end,
-})
+--  use({
+--    "iamcco/markdown-preview.nvim",
+--    run = function() vim.fn["mkdp#util#install"]() end,
+--})
 
 
   -- Navigation +++
@@ -109,6 +110,7 @@ return packer.startup(function(use)
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/nvim-cmp'
   use 'ray-x/lsp_signature.nvim'
+  use { "pmizio/typescript-tools.nvim", dependencies = { "nvim-lua/plenary.nvim" }}
 
   -- DAP
 

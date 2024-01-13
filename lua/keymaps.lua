@@ -31,14 +31,37 @@ keymap("n", "<leader>gp", ":Gitsign previw_hunk<CR>", opts)
 keymap("n", "<leader>gr", ":Gitsign undo_stage_hunk<CR>", opts)
 
 -- LSP
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
+    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+      keymap("n", "<leader>co",":lua vim.lsp.buf.code_action()<CR>", opts)
+      keymap("n", "gr", ":lua vim.lsp.buf.references()<CR>", opts)
+      keymap("n", "rn", ":lua vim.lsp.buf.rename()<CR>", opts)
 
---keymap('n', 'KF', vim.lsp.buf.hover, bufopts)
-keymap("n", "gr", ":lua vim.lsp.buf.references()<CR>", opts)
-keymap("n", "rn", ":lua vim.lsp.buf.rename()<CR>", opts)
-keymap("n", "m", ":ClangdSwitchSourceHeader<CR>", opts)
+      local clients = vim.lsp.buf_get_clients(0)
+      for _, client in pairs(clients) do
+        if client.name == 'omnisharp' then
+          vim.keymap.set('n', 'gd', ":lua require('omnisharp_extended').lsp_definitions()<CR>", opts)
+          vim.keymap.set('n', 'gj', ":lua require('csharpls_extended').lsp_definitions()<CR>", opts)
 
-keymap("n", "<leader>co",":lua vim.lsp.buf.code_action()<CR>", opts)
+          vim.opt.softtabstop = 4
+          vim.opt.tabstop = 4
+          vim.opt.shiftwidth = 4
+        elseif client.name == 'clangd' then
 
+          vim.opt.softtabstop = 2
+          vim.opt.tabstop = 2
+          vim.opt.shiftwidth = 2
+
+          vim.keymap.set('n', 'gd', ':lua vim.lsp.buf.definition()<CR>', opts)
+          keymap("n", "m", ":ClangdSwitchSourceHeader<CR>", opts)
+        elseif client.name == 'tsserver' then
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        end
+      end
+  end,
+})
 -- DAP
 
 keymap("n", "<leader>dd", "<cmd>lua dap_ll()<CR>", opts)

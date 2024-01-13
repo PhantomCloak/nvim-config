@@ -22,12 +22,6 @@ dap.configurations.cs = {
     }
 }
 
-dapCodeLLDBCfg = {
-    type = 'server',
-    host = '127.0.0.1',
-    port = 13000
-}
-
 dapReplCfg = {
     exit = { 'q', 'exit' },
     custom_commands = {
@@ -36,8 +30,26 @@ dapReplCfg = {
     }
 }
 
-dap.adapters.codelldb = dapCodeLLDBCfg
-dap.configurations.c = dapCCfg
+dap.adapters.codelldb = {
+    type = 'server',
+    host = '127.0.0.1',
+    port = 13000,
+}
+
+dap.configurations.c = {
+    {
+        type = "codelldb",
+        request = "launch",
+        cwd = '${workspaceFolder}',
+        terminal = 'integrated',
+        console = 'integratedTerminal',
+        stopOnEntry = false,
+        program = function()
+            return vim.fn.input('executable: ', vim.fn.getcwd() .. '/', 'file')
+        end
+    }
+}
+
 dap.repl.commands = vim.tbl_extend('force', dap.repl.commands, dapReplCfg)
 
 dap.configurations.cpp = dap.configurations.c

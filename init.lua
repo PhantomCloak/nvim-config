@@ -70,6 +70,7 @@ qf = require("qf")
 dressing = require("dressing")
 lspfuzzy = require('lspfuzzy')
 
+require 'hex'.setup()
 bqf.setup()
 qf.setup()
 dressing.setup()
