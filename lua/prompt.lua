@@ -40,7 +40,6 @@ let g:fzf_colors =
 let g:fzf_preview_window = ['right:50%:noborder']
 
 let $FZF_DEFAULT_OPTS = '--layout=reverse --info=inline --height 40% --preview-window noborder'
-let $FZF_DEFAULT_COMMAND="rg --files --hidden"
 let $FZF_DEFAULT_COMMAND = 'rg -F --files --hidden'
 let $FZF_DEFAULT_OPTS = '--bind tab:down,shift-tab:up'
 

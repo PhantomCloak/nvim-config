@@ -30,6 +30,10 @@ keymap("n", "<leader>gs", ":<cmd>lua show_git_diff()<CR>", opts)
 keymap("n", "<leader>gp", ":Gitsign previw_hunk<CR>", opts)
 keymap("n", "<leader>gr", ":Gitsign undo_stage_hunk<CR>", opts)
 
+vim.keymap.set('n', 'gd', ':lua vim.lsp.buf.definition()<CR>', opts)
+vim.keymap.set('n', '<C-x>', ':belowright sp<CR>:lua vim.lsp.buf.definition()<CR>', opts)
+
+vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
 -- LSP
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -54,7 +58,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
           vim.opt.tabstop = 2
           vim.opt.shiftwidth = 2
 
-          vim.keymap.set('n', 'gd', ':lua vim.lsp.buf.definition()<CR>', opts)
+
+		  --vim.keymap.set('n', '<C-v>', ':vsp<CR>:lua vim.lsp.buf.definition()<CR>', opts)
+		  --vim.keymap.set('n', '<C-x>', ':sp<CR>:lua vim.lsp.buf.definition()<CR>', opts)
+
           keymap("n", "m", ":ClangdSwitchSourceHeader<CR>", opts)
         elseif client.name == 'tsserver' then
           vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
@@ -64,43 +71,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 -- DAP
 
-keymap("n", "<leader>dd", "<cmd>lua dap_ll()<CR>", opts)
-keymap("n", "<leader>dt", "<cmd>lua dap_tt()<CR>", opts)
-keymap("n", "<F5>", ":DapContinue<CR>", opts)
-keymap("n", "<F9>", ":DapToggleBreakpoint<CR>", opts)
-keymap("n", "<F10>", ":DapStepOver<CR>", opts)
-keymap("n", "<F11>", ":DapStepInto<CR>", opts)
-keymap("n", "K", ":lua require(\"dapui\").eval()<CR>", opts)
-
-function dap_tt()
-    vim.cmd('DapTerminate')  
-    vim.cmd("lua require('dapui').close()")
-    vim.cmd('NvimTreeOpen')  
-end
-
-function dap_ll()
-    vim.cmd('NvimTreeClose')  
-    vim.cmd("lua require('dapui').open()")
-    vim.cmd('DapContinue')  
-end
-
 function show_git_diff()
     vim.cmd("NvimTreeClose")
     vim.cmd('Gitsign diffthis')  
 end
--- FZF
 
 keymap("n", "fs", ":Ag ", opts)
--- Telescope
-
-keymap("n", "<leader>fc", ":Telescope command_center<CR>", opts)
-keymap("n", "<leader>dD", ":Telescope lsp_document_diagnostics<CR>", opts)
-keymap("n", "<leader>dW", ":Telescope lsp_workspace_diagnostics<CR>", opts)
-keymap("n", "<leader>ca", ":%Telescope lsp_range_code_actions", opts)
-keymap("n", "tc", ":lua require'telescope.builtin'.commands(require('telescope.themes').get_dropdown({}))<CR>", opts)
-keymap("n", "<F3>", ":lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({}))<CR>", opts)
-keymap("n", "rt", ":lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({}))<CR>", opts)
 keymap("n", "ff", ":FZF<CR>", opts)
-keymap("n", "tn", ":tabedit blank | FZF<CR>", opts)
 
 -- LSP Telescopj

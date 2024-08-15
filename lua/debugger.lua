@@ -93,5 +93,53 @@ dapUiCfg = {
     }
 }
 
+dap.adapters.chrome = {
+    type = "executable",
+    command = "node",
+    args = {os.getenv("HOME") .. "/nvim-debug-servers/vscode-chrome-debug/out/src/chromeDebug.js"}
+}
+
+dap.configurations.javascriptreact = { -- change this to javascript if needed
+    {
+        type = "chrome",
+        request = "attach",
+        program = "${file}",
+        cwd = vim.fn.getcwd(),
+        sourceMaps = true,
+        protocol = "inspector",
+        port = 9222,
+        webRoot = "${workspaceFolder}"
+    }
+}
+
+dap.configurations.typescript = { -- change to typescript if needed
+    {
+        type = "chrome",
+        request = "attach",
+        program = "${file}",
+        cwd = vim.fn.getcwd(),
+        sourceMaps = true,
+        protocol = "inspector",
+        port = 9222,
+        webRoot = "${workspaceFolder}"
+    }
+}
 
 dapui.setup(dapUiCfg);
+
+local ok, godot = pcall(require, "godot")
+if not ok then
+	return
+end
+local config = {
+    bin = "/Users/ph4nt0m/Downloads/Godot_mono.app/Contents/MacOS/Godot",
+-- 	gui = {
+-- 		console_config = @config for vim.api.nvim_open_win
+-- 	},
+}
+
+godot.setup(config)
+
+local function map(m, k, v)
+	vim.keymap.set(m, k, v, { silent = true })
+end
